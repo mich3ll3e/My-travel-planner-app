@@ -21,3 +21,20 @@ Choose your plane tickets.
 
 ## Finally
 Check out the budget of your trip based on your selections and get your itinerary.
+
+
+## APIs
+
+### Weather
+
+MetaWeather https://www.metaweather.com/api/#locationday
+
+### Accomodation
+
+Booking.com https://developers.booking.com/api/index.html?version=2.7
+
+### Attractions
+
+Google places: https://cloud.google.com/maps-platform/places
+
+### Flight:
