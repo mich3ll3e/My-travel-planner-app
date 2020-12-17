@@ -38,3 +38,5 @@ Booking.com https://developers.booking.com/api/index.html?version=2.7
 Google places: https://cloud.google.com/maps-platform/places
 
 ### Flight:
+
+Travelpayouts: https://rapidapi.com/Travelpayouts/api/flight-data/details
