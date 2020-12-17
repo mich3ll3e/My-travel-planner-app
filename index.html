@@ -11,38 +11,26 @@
         <h1>My Travel Plan</h1>
     </header>
     <div id="container">
-
-    <tr> 
-        Current City:
-        <input id="currentcity" type="text">
-    </tr>
-
-    <br>
-    <br>
-    <tr>
-        Destination:
-        <input id="destination" type="text">
-    </tr>
-
-    <br>
-    <br>
-    <br>
-
-    <tr>
-        Start Date:
-        <input id="startdate" type="text">
-        End Date:
-        <input id="enddate" type="text">
-    </tr>
-
-
-
-
-
-
-    </div>
-
-
+        <form>
+            <label>
+                <input type="city" id="currentcity" type="text" required />
+                <div class="label-text">Current City</div>
+            </label>
+            <label>
+                <input type="city" name="destination" id="destination" required />
+                <div class="label-text">Destination</div>
+            </label>
+            <label>
+                <input type="date" name="startdate" id="startdate" required />
+                <div class="label-text">Start Date</div>
+            </label>
+            <label>
+                <input type="date" name="enddate" id="enddate" required />
+                <div class="label-text">End Date</div>
+            </label>
+            <button type="submit" value="Submit">Submit</button>
+        </form>
+    </div>    
 
 
 
