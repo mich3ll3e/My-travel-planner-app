@@ -6,8 +6,8 @@ header {
 #container {
     width: 35%;
     text-align: center;
-    background: rgb(20, 226, 226);
-  
+    background: rgb(173, 175, 175);
+    margin: auto;
 }
 
 label {
@@ -17,7 +17,7 @@ label {
     text-align: center;
   }
   label .label-text {
-    color: #9B9B9B;
+    color: black;
     cursor: text;
     font-size: 15px;
     line-height: 20px;
@@ -27,7 +27,7 @@ label {
 
   
   label input:focus + .label-text {
-    color: #F0F0F0;
+    color: black;
     font-size: 13px;
     margin-top: 10px;
     -moz-transform: translateY(-74px);
@@ -59,7 +59,7 @@ label {
 
   button {
     background: transparent;
-    color: #F0F0F0;
+    color: black;
     border: 2px solid #F0F0F0;
     font-size: 15px;
     letter-spacing: 2px;
