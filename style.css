@@ -147,10 +147,8 @@ label {
 
   #changedate {
       width: auto;
-      background: cornflowerblue;
+      background: rgb(39, 58, 97);
+      bottom: auto;
   }
 
-  tr {
-      position: relative;
-      bottom: 20px;
-  }
+ 
