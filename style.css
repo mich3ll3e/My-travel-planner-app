@@ -1,9 +1,6 @@
-header {
-    text-align: center;
-    padding: 8px;
-    background: rgb(0, 0, 0);
-    color: darkgrey;
-}
+
+/* css for index */
+
 
 #container {
     width: 35%;
@@ -12,6 +9,7 @@ header {
     margin: auto;
 }
 
+/* text area effects and style */
 label {
     display: block;
     letter-spacing: 4px;
@@ -79,33 +77,16 @@ label {
     color: #333333;
   }
 
+/* end of index css */
 
-  .button4 {
-    background-color: white;
-    color: black;
-    border: 2px solid #e7e7e7;
-  }
-  
-  .button4:hover {background-color: #e7e7e7;}
-  
-  .button5 {
-    background-color: white;
-    color: black;
-    border: 2px solid #555555;
 
-    background-color: white;
-    color: black;
-    border: 2px solid #e7e7e7;
-  }
-  
-  .button4:hover {background-color: #e7e7e7;}
-  
-  .button5 {
-    background-color: white;
-    color: black;
-    border: 2px solid #555555;
-  }
 
+
+
+
+/* weather page css */
+
+/* "NEXT" button */
   #weatherBtn  {
    
     width: 15px;
@@ -122,6 +103,7 @@ label {
     border: 1px solid #999;
     text-align: center;
   }
+/* End of button */
 
   h1 {
     font-size: 5em;
@@ -129,6 +111,7 @@ label {
     line-height: 1;
   }
 
+  /* change date submit button */
   #changedateBtn {
     width: 15px;
     right: 20px;
@@ -142,13 +125,25 @@ label {
     border-radius: 15px;
     border: 1px solid #999;
     text-align: center;
-
   }
+  /* end of button */
 
+  /* change date container */
   #changedate {
-      width: auto;
-      background: rgb(39, 58, 97);
-      bottom: auto;
+    position: absolute;
+    bottom: 15px;
+    background: rgb(0, 153, 255);
+    border: 5px solid black;
   }
 
- 
+  /* change date title */
+#changedatetitle {
+    font-size: 25px;
+}
+
+
+#containers {
+    width: 90%;
+    margin: auto;
+    border: 2px solid black;
+}
