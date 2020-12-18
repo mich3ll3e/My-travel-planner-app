@@ -1,7 +1,21 @@
 
-/* css for index */
+/* NOTE:
+- The styling for all the api containers */
+#containers {
+    width: 97%;
+    margin: auto;
+    border: 2px solid black;
+}
 
 
+
+
+
+
+
+/* start of index css */
+
+/* container around text box */
 #container {
     width: 35%;
     text-align: center;
@@ -9,7 +23,7 @@
     margin: auto;
 }
 
-/* text area effects and style */
+/* text box cool effects */
 label {
     display: block;
     letter-spacing: 4px;
@@ -81,10 +95,7 @@ label {
 
 
 
-
-
-
-/* weather page css */
+/* start of weather page css */
 
 /* "NEXT" button */
   #weatherBtn  {
@@ -143,8 +154,21 @@ label {
 }
 
 
-#containers {
-    width: 90%;
-    margin: auto;
-    border: 2px solid black;
+/* css for accommodations page */
+
+/* NEXT button (button to go to next page) */
+#accommodationBtn {
+    width: 15px;
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    background: rgb(0, 0, 0);
+    color: #fff;
+    font-family: tahoma,geneva,algerian;
+    height: 30px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    border: 1px solid #999;
+    text-align: center;
 }
