@@ -154,10 +154,39 @@ label {
 }
 
 
+
+
+
 /* css for accommodations page */
 
 /* NEXT button (button to go to next page) */
 #accommodationBtn {
+    width: 15px;
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    background: rgb(0, 0, 0);
+    color: #fff;
+    font-family: tahoma,geneva,algerian;
+    height: 30px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    border: 1px solid #999;
+    text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+/* css for flights page */
+#flightsBtn {
     width: 15px;
     position: absolute;
     right: 20px;
