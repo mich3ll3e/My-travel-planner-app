@@ -1,13 +1,15 @@
 
-/* NOTE:
-- styling for all the api containers */
+/* Styling for all files */
+
+/* api containers */
 #containers {
-    width: 97%;
+    width: 90%;
     margin: auto;
     border: 2px solid black;
+    text-align: center;
 }
 
-/* styling for all headers */
+/* headers */
 header {
   text-align: center;
 }
@@ -19,11 +21,7 @@ header {
 
 
 
-
-
-
-
-/* start of index css */
+/* START OF INDEX CSS */
 
 /* container around text box */
 #container {
@@ -33,7 +31,7 @@ header {
     margin: auto;
 }
 
-/* text box cool effects */
+/* text box css */
 label {
     display: block;
     letter-spacing: 4px;
@@ -101,11 +99,17 @@ label {
     color: #333333;
   }
 
-/* end of index css */
 
 
 
-/* start of weather page css */
+
+
+
+
+
+
+
+/* START OF WEATHER CSS */
 
 /* "NEXT" button */
   #weatherBtn  {
@@ -124,7 +128,7 @@ label {
     border: 1px solid #999;
     text-align: center;
   }
-/* End of button */
+
 
 /* title 'weather' */
   h1 {
@@ -148,7 +152,7 @@ label {
     border: 1px solid #999;
     text-align: center;
   }
-  /* end of button */
+  
 
   /* change date container */
   #changedate {
@@ -167,9 +171,16 @@ label {
 
 
 
-/* css for accommodations page */
 
-/* NEXT button (button to go to next page) */
+
+
+
+
+
+
+/* START OF ACCOMMODATIONS CSS */
+
+/* Buttton for next page */
 #accommodationBtn {
     width: 15px;
     position: absolute;
@@ -201,7 +212,7 @@ label {
 
 
 
-/* css for attractions page */
+/* START OF ATTRACTIONS CSS */
 
 #attractionsBtn {
   width: 15px;
@@ -233,17 +244,9 @@ label {
 
 
 
+/* START OF FLIGHTS CSS */
 
-
-
-
-
-
-
-
-
-
-/* css for flights page */
+/* button for next page */
 #flightsBtn {
     width: 15px;
     position: absolute;
@@ -276,5 +279,10 @@ label {
 
 
 
-/* css for my plan (last page) */
+/* START OF ITINERARY CSS */
+
+.column {
+  float: left;
+  width: 50%;
+}
 
