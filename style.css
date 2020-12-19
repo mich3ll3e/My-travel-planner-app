@@ -1,11 +1,21 @@
 
 /* NOTE:
-- The styling for all the api containers */
+- styling for all the api containers */
 #containers {
     width: 97%;
     margin: auto;
     border: 2px solid black;
 }
+
+/* styling for all headers */
+header {
+  text-align: center;
+}
+
+
+
+
+
 
 
 
@@ -19,7 +29,7 @@
 #container {
     width: 35%;
     text-align: center;
-    background:rgb(152, 211, 230);
+    background:rgb(101, 173, 197);
     margin: auto;
 }
 
@@ -185,6 +195,54 @@ label {
 
 
 
+
+
+
+
+
+
+/* css for attractions page */
+
+#attractionsBtn {
+  width: 15px;
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  background: rgb(0, 0, 0);
+  color: #fff;
+  font-family: tahoma,geneva,algerian;
+  height: 30px;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  border: 1px solid #999;
+  text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* css for flights page */
 #flightsBtn {
     width: 15px;
@@ -201,3 +259,22 @@ label {
     border: 1px solid #999;
     text-align: center;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* css for my plan (last page) */
+
