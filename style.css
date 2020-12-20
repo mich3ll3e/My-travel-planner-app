@@ -111,7 +111,7 @@ label {
 
 /* START OF WEATHER CSS */
 
-/* "NEXT" button */
+/* button for next page */
   #weatherBtn  {
    
     width: 15px;
@@ -139,7 +139,7 @@ label {
 
   /* change date submit button */
   #changedateBtn {
-    width: 15px;
+    width: 5px;
     right: 20px;
     bottom: 20px;
     background: rgb(0, 0, 0);
