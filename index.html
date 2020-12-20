@@ -31,8 +31,36 @@
         </form>
     </div>    
 
+<!--local storage for input-->
+<script>
+const currentcity = document.getElementById("currentcity")
+const destination = document.getElementById("destination")
+const startdate = document.getElementById("startdate")
+const enddate = document.getElementById("enddate")
+const submit = document.getElementById("submitBtn")
+
+submit.onclick = function() {
+const key = currentcity.value;
+const value = destination.value;
+
+if (key && value) {
+    localStorage.setItem(key, value)
+}
+}
+
+submit.onclick = function() {
+    var key = startdate.value;
+    var key = enddate.value;
+
+    if (key && value) {
+        localStorage.setItem(key, value)
+    }
+}
 
 
+
+
+</script>
 
 
 
