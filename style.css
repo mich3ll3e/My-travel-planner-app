@@ -139,28 +139,20 @@ label {
 
   /* change date submit button */
   #changedateBtn {
-    width: 5px;
-    right: 20px;
-    bottom: 20px;
     background: rgb(0, 0, 0);
     color: rgb(199, 196, 196);
     font-family: tahoma,geneva,algerian;
-    height: 30px;
-    -webkit-border-radius: 15px;
-    -moz-border-radius: 15px;
-    border-radius: 15px;
     border: 1px solid #999;
     text-align: center;
   }
   
 
-  /* change date container */
-  #changedate {
-    position: absolute;
-    bottom: 15px;
-    background: rgb(255, 255, 255);
-    border: 2px solid black;
+  /* change date box */
+  fieldset {
+    width: fit-content;
+    padding: 20px;
   }
+  
 
   /* change date title */
 #changedatetitle {
