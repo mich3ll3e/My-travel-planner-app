@@ -1,0 +1,280 @@
+
+/* Styling for all files */
+
+/* api containers */
+#containers {
+    width: 90%;
+    margin: auto;
+    border: 2px solid black;
+    text-align: center;
+}
+
+/* headers */
+header {
+  text-align: center;
+}
+
+
+
+
+
+
+
+
+/* START OF INDEX CSS */
+
+/* container around text box */
+#container {
+    width: 35%;
+    text-align: center;
+    background:rgb(101, 173, 197);
+    margin: auto;
+}
+
+/* text box css */
+label {
+    display: block;
+    letter-spacing: 4px;
+    padding-top: 30px;
+    text-align: center;
+  }
+  label .label-text {
+    color: black;
+    cursor: text;
+    font-size: 15px;
+    line-height: 20px;
+    text-transform: uppercase;
+    
+  }
+
+  
+  label input:focus + .label-text {
+    color: black;
+    font-size: 13px;
+    margin-top: 10px;
+    -moz-transform: translateY(-74px);
+    -ms-transform: translateY(-74px);
+    -webkit-transform: translateY(-74px);
+    transform: translateY(-74px);
+  }
+
+  label input {
+    background-color: transparent;
+    border: 0;
+    border-bottom: 2px solid #4A4A4A;
+    color: white;
+    font-size: 20px;
+    letter-spacing: 1px;
+    outline: 0;
+    padding: 5px 20px;
+    text-align: center;
+    transition: all 0.3s;
+    width: 200px;
+  }
+
+  label input:focus {
+    max-width: 100%;
+    width: 400px;
+  }
+
+  
+
+  button {
+    background: transparent;
+    color: black;
+    border: 2px solid #F0F0F0;
+    font-size: 15px;
+    letter-spacing: 2px;
+    padding: 20px 75px;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: inline-block;
+    margin: 15px 30px;
+    -webkit-transition: all 0.4s;
+   -moz-transition: all 0.4s;
+   transition: all 0.4s;
+  }
+  button:hover, button:focus {
+    background-color: white;
+    color: #333333;
+  }
+
+
+
+
+
+
+
+
+
+
+
+/* START OF WEATHER CSS */
+
+/* button for next page */
+  #weatherBtn  {
+   
+    width: 15px;
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    background: rgb(0, 0, 0);
+    color: #fff;
+    font-family: tahoma,geneva,algerian;
+    height: 30px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    border: 1px solid #999;
+    text-align: center;
+  }
+
+
+/* title 'weather' */
+  h1 {
+    font-size: 5em;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  /* change date submit button */
+  #changedateBtn {
+    background: rgb(0, 0, 0);
+    color: rgb(199, 196, 196);
+    font-family: tahoma,geneva,algerian;
+    border: 1px solid #999;
+    text-align: center;
+  }
+  
+
+  /* change date box */
+  fieldset {
+    width: fit-content;
+    padding: 20px;
+  }
+  
+
+  /* change date title */
+#changedatetitle {
+    font-size: 25px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* START OF ACCOMMODATIONS CSS */
+
+/* Buttton for next page */
+#accommodationBtn {
+    width: 15px;
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    background: rgb(0, 0, 0);
+    color: #fff;
+    font-family: tahoma,geneva,algerian;
+    height: 30px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    border: 1px solid #999;
+    text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* START OF ATTRACTIONS CSS */
+
+#attractionsBtn {
+  width: 15px;
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  background: rgb(0, 0, 0);
+  color: #fff;
+  font-family: tahoma,geneva,algerian;
+  height: 30px;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  border: 1px solid #999;
+  text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* START OF FLIGHTS CSS */
+
+/* button for next page */
+#flightsBtn {
+    width: 15px;
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    background: rgb(0, 0, 0);
+    color: #fff;
+    font-family: tahoma,geneva,algerian;
+    height: 30px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    border: 1px solid #999;
+    text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* START OF ITINERARY CSS */
+
+.column {
+  float: left;
+  width: 50%;
+}
+

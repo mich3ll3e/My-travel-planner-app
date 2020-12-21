@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<header>
+    <h1>My Travel Plan</h1>
+</header>
+    <div id="container">
+        <form>
+            <label>
+                <input type="city" id="currentcity" type="text" required />
+                <div class="label-text">Travelling From</div>
+            </label>
+            <label>
+                <input type="city" name="destination" id="destination" required />
+                <div class="label-text">Destination</div>
+            </label>
+            <label>
+                <input type="date" name="startdate" id="startdate" required />
+                <div class="label-text">Start Date</div>
+            </label>
+            <label>
+                <input type="date" name="enddate" id="enddate" required />
+                <div class="label-text">End Date</div>
+            </label>
+            <button type="submit" onclick="location.href='weather.html'"id="submitBtn" value="Submit">Submit</button>
+        </form>
+    </div>    
+
+<!--local storage for input-->
+<script>
+var currentcity = document.getElementById("currentcity")
+var destination = document.getElementById("destination")
+var startdate = document.getElementById("startdate")
+var enddate = document.getElementById("enddate")
+var submit = document.getElementById("submitBtn")
+
+submit.onclick = function() {
+var key = currentcity.value;
+var value = destination.value;
+
+if (key && value) {
+    localStorage.setItem(key, value)
+    localStorage.getItem(key, value)
+}
+}
+
+submit.onclick = function() {
+    var key = date
+    var value = (startdate.value, enddate.value)
+
+    if (key && value) {
+        localStorage.setItem(key, value);
+        localStorage.getItem(key, value);
+    }
+}
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
