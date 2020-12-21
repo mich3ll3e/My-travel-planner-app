@@ -33,27 +33,29 @@
 
 <!--local storage for input-->
 <script>
-const currentcity = document.getElementById("currentcity")
-const destination = document.getElementById("destination")
-const startdate = document.getElementById("startdate")
-const enddate = document.getElementById("enddate")
-const submit = document.getElementById("submitBtn")
+var currentcity = document.getElementById("currentcity")
+var destination = document.getElementById("destination")
+var startdate = document.getElementById("startdate")
+var enddate = document.getElementById("enddate")
+var submit = document.getElementById("submitBtn")
 
 submit.onclick = function() {
-const key = currentcity.value;
-const value = destination.value;
+var key = currentcity.value;
+var value = destination.value;
 
 if (key && value) {
     localStorage.setItem(key, value)
+    localStorage.getItem(key, value)
 }
 }
 
 submit.onclick = function() {
-    var key = startdate.value;
-    var key = enddate.value;
+    var key = date
+    var value = (startdate.value, enddate.value)
 
     if (key && value) {
-        localStorage.setItem(key, value)
+        localStorage.setItem(key, value);
+        localStorage.getItem(key, value);
     }
 }
 
