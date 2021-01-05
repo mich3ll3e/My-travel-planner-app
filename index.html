@@ -12,27 +12,61 @@
 <header>
     <h1>My Travel Plan</h1>
 </header>
-<div id="container">
+<main id="container">
     <form>
         <label>
             <input type="city" id="currentcity" type="text" required />
             <div class="label-text">Travelling From</div>
         </label>
         <label>
-            <input type="city" name="destination" id="destination" required />
+            <input type="city"id="destination" required />
             <div class="label-text">Destination</div>
         </label>
         <label>
-            <input type="date" name="startdate" id="startdate" required />
+            <input type="date" id="startdate" required />
             <div class="label-text">Start Date</div>
         </label>
         <label>
-            <input type="date" name="enddate" id="enddate" required />
+            <input type="date" id="enddate" required />
             <div class="label-text">End Date</div>
         </label>
-        <button type="submit" id="submitBtn" value="Submit">Submit</button>
+        <button type="submit" class="nextBtn">Submit</button>
     </form>
-</div>
+    <hr>
+    <div>
+        <h2>Weather</h2>
+        <label>
+            <input type="date" id="startdateUpdate"/>
+            <div class="label-text">Start Date</div>
+        </label>
+        <label>
+            <input type="date" id="enddateUpdate"/>
+            <div class="label-text">End Date</div>
+        </label>
+        <button type="submit" id="updateBtn">Update Date</button>
+        <p>Or</p>
+        <button type="submit" class="nextBtn">Next Step</button>
+    </div>
+    <hr>
+    <div>
+        <h2>Accomodation</h2>
+        <div id="hotelsList"></div>
+        <button type="submit" class="nextBtn">Next Step</button>
+    </div>
+    <hr>
+    <div>
+        <h2>Flight</h2>
+        <div id="flightsList"></div>
+        <button type="submit" class="nextBtn">Next Step</button>
+    </div>
+    <hr>
+    <div>
+        <h2>Activities</h2>
+        <div id="activitiesList"></div>
+        <button type="submit" class="nextBtn">Next Step</button>
+    </div>
+    <hr>
+</main>
 </body>
 <script src="script.js"></script>
 
