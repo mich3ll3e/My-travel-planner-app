@@ -15,17 +15,11 @@ header {
 }
 
 
-
-
-
-
-
-
 /* START OF INDEX CSS */
 
 /* container around text box */
 #container {
-    width: 35%;
+    width: 65%;
     text-align: center;
     background:rgb(101, 173, 197);
     margin: auto;
@@ -99,182 +93,23 @@ label {
     color: #333333;
   }
 
-
-
-
-
-
-
-
-
-
-
-/* START OF WEATHER CSS */
-
-/* button for next page */
-  #weatherBtn  {
-   
-    width: 15px;
-    position: absolute;
-    right: 20px;
-    bottom: 20px;
-    background: rgb(0, 0, 0);
-    color: #fff;
-    font-family: tahoma,geneva,algerian;
-    height: 30px;
-    -webkit-border-radius: 15px;
-    -moz-border-radius: 15px;
-    border-radius: 15px;
-    border: 1px solid #999;
-    text-align: center;
+  #weatherView{
+    overflow: auto;
+    white-space: nowrap;
+    margin: auto;
+    border: solid 1px black;
+    padding: 5px;
+    max-width: 90%;
   }
 
-
-/* title 'weather' */
-  h1 {
-    font-size: 5em;
-    font-weight: 900;
-    line-height: 1;
+  .error{
+    color: red;
   }
 
-  /* change date submit button */
-  #changedateBtn {
-    background: rgb(0, 0, 0);
-    color: rgb(199, 196, 196);
-    font-family: tahoma,geneva,algerian;
-    border: 1px solid #999;
-    text-align: center;
+  .weatherBox{
+    background-color: white;
+    width: 20%;
+    height: 150px;
+    margin: 5px;
+    display: inline-block;
   }
-  
-
-  /* change date box */
-  fieldset {
-    width: fit-content;
-    padding: 20px;
-  }
-  
-
-  /* change date title */
-#changedatetitle {
-    font-size: 25px;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-/* START OF ACCOMMODATIONS CSS */
-
-/* Buttton for next page */
-#accommodationBtn {
-    width: 15px;
-    position: absolute;
-    right: 20px;
-    bottom: 20px;
-    background: rgb(0, 0, 0);
-    color: #fff;
-    font-family: tahoma,geneva,algerian;
-    height: 30px;
-    -webkit-border-radius: 15px;
-    -moz-border-radius: 15px;
-    border-radius: 15px;
-    border: 1px solid #999;
-    text-align: center;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* START OF ATTRACTIONS CSS */
-
-#attractionsBtn {
-  width: 15px;
-  position: absolute;
-  right: 20px;
-  bottom: 20px;
-  background: rgb(0, 0, 0);
-  color: #fff;
-  font-family: tahoma,geneva,algerian;
-  height: 30px;
-  -webkit-border-radius: 15px;
-  -moz-border-radius: 15px;
-  border-radius: 15px;
-  border: 1px solid #999;
-  text-align: center;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* START OF FLIGHTS CSS */
-
-/* button for next page */
-#flightsBtn {
-    width: 15px;
-    position: absolute;
-    right: 20px;
-    bottom: 20px;
-    background: rgb(0, 0, 0);
-    color: #fff;
-    font-family: tahoma,geneva,algerian;
-    height: 30px;
-    -webkit-border-radius: 15px;
-    -moz-border-radius: 15px;
-    border-radius: 15px;
-    border: 1px solid #999;
-    text-align: center;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* START OF ITINERARY CSS */
-
-.column {
-  float: left;
-  width: 50%;
-}
-
