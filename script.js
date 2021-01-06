@@ -2,8 +2,7 @@ var city = null;
 var dest = null;
 var start = null;
 var end = null;
-var weather = null;
-
+var weather = new Array();
 
 //WEATHER
 
@@ -41,52 +40,81 @@ function dateCheck(type) {
         error.text("End date cannot be before the start date")
         $("#enddate" + type).after(error);
     } else { //else, get the weather
+        var stUp = $("#startdateUpdate");
+        var enUp = $("#enddateUpdate");
+        if(stUp.val()=="" || enUp.val()==""){
+            stUp.val($("#startdate").val());
+            enUp.val($("#enddate").val());
+        }
+        $("#startdate").val("");
+        $("#enddate").val("");
         lookForWeather();
     }
 }
 
 function lookForWeather() {
-    if (start.diff(moment(), 'days') >= 14) { //if start date is past 14 days (the limit of weather forecast), then use historical date
+    if (start.diff(moment(), 'days') >= 13) { //if start date is past 14 days (the limit of weather forecast), then use historical date
         var years = start.diff(moment(), 'years') + 1;  //find difference between start date year and current year
         start = start.subtract(years, 'years');         //decrement start date year to become 1 less current year
         years = end.diff(moment(), 'years') + 1;        //find difference between end date year and current year
         end = end.subtract(years, 'years');             //decrement end date year to become 1 less current year
-        getHistorical(start, end);
-    } else if (end.diff(moment(), 'days') < 14) { //if end date is within 14 days (the limite of weather forecase), then use forecast date
-        for (let date = start; date.diff(end, 'days') <= 0; date.add(1, 'days')) { //loop through dates and get weather forecast
-            getForecast(date);
-        }
+        getHistorical(start, end).then(() => {
+            loadWeather();
+        });
+    } else if (end.diff(moment(), 'days') < 13) { //if end date is within 14 days (the limite of weather forecase), then use forecast date
+        getForecast(start, end).then(() => {
+            loadWeather();
+        });
     } else { //else, use forecast date on days within 14 days, and historical data on days beyond 14 days.
-        let date = start
-        for (date; date.diff(moment(), 'days') < 14; date.add(1, 'days')) { //loop through days within the 14 day limit and get forecast
-            getForecast(date);
-        }
-        date = date.subtract(1, 'years');               //decrement date year by 1
-        var years = end.diff(moment(), 'years') + 1;    //find difference between end date year and current year
-        end = end.subtract(years, 'years');             //decrement end date year to become 1 less current year
-        getHistorical(date, end);
+        var forecastEnd = moment().add(13, 'days');
+        getForecast(start, forecastEnd.format("YYYY-MM-DD")).then(() => {
+            var histStart = moment().subtract(1, 'years').add(14, 'days');  //decrement end date year by 1, and add 1 day
+            var years = end.diff(moment(), 'years') + 1;                    //find difference between end date year and current year
+            end = end.subtract(years, 'years');                             //decrement end date year to become 1 less current year
+            getHistorical(histStart, end).then(() => {
+                loadWeather();
+            });
+        });
     }
 }
 
-function getForecast(date) {
-    $.get("http://api.worldweatheronline.com/premium/v1/weather.ashx?q=" + dest + "&date=" + date.format('YYYY-MM-DD') + "&tp=12&format=json&key=6dda14a8cc53490d9fd201404210301").then(result => {
-        var weather = result.data.weather[0].hourly[1];
-        loadWeather(result.data.weather[0].date, weather.tempC, weather.humidity);
-    }).catch(e => {
-        handleError(e);
+async function getForecast(startDate, endDate) {
+    const forecast = new Promise((resolve, reject) => {
+        endDate = moment(endDate);
+        $.get("http://api.worldweatheronline.com/premium/v1/weather.ashx?q=" + dest + "&tp=12&format=json&key=6dda14a8cc53490d9fd201404210301").then(result => {
+            result = result.data.weather;
+            result.forEach(element => {
+                let date = moment(element.date);
+                if (date.diff(startDate) >= 0 && date.diff(endDate) <= 0) {
+                    var weatherDate = element.hourly[1];
+                    weather.push({ 'date': element.date, 'temperature': weatherDate.tempC, 'humidity': weatherDate.humidity });
+                }
+            });
+            resolve(true);
+        }).catch(e => {
+            handleError(e);
+            reject(false);
+        });
     });
+    return forecast;
 }
 
-function getHistorical(startDate, endDate) {
-    $.get("https://api.worldweatheronline.com/premium/v1/past-weather.ashx?q=" + dest + "&date=" + startDate.format('YYYY-MM-DD') + "&enddate=" + endDate.format('YYYY-MM-DD') + "&tp=12&format=json&key=6dda14a8cc53490d9fd201404210301").then(result => {
-        var result = result.data.weather;
-        result.forEach(element => {
-            var weather = element.hourly[1];
-            loadWeather(element.date, weather.tempC, weather.humidity);
+async function getHistorical(startDate, endDate) {
+    const historical = new Promise((resolve, reject) => {
+        $.get("https://api.worldweatheronline.com/premium/v1/past-weather.ashx?q=" + dest + "&date=" + startDate.format('YYYY-MM-DD') + "&enddate=" + endDate.format('YYYY-MM-DD') + "&tp=12&format=json&key=6dda14a8cc53490d9fd201404210301").then(result => {
+            result = result.data.weather;
+            result.forEach(element => {
+                var weatherDate = element.hourly[1];
+                var newDate = (moment(element.date).add(1, 'years')).format("YYYY-MM-DD")
+                weather.push({ 'date': newDate, 'temperature': weatherDate.tempC, 'humidity': weatherDate.humidity });
+            });
+            resolve(true);
+        }).catch(e => {
+            handleError(e);
+            reject(false);
         });
-    }).catch(e => {
-        handleError(e);
     });
+    return historical;
 }
 
 function handleError(e) {
@@ -103,10 +131,13 @@ function handleError(e) {
     return;
 }
 
-function loadWeather(date, temp, hum) {
-    var box = $("<div>").addClass("weatherBox");
-    $(box).append("<h3>" + date + "</h3>").append("<p>Temperature: " + temp + "°C</p>").append("<p>Humidity: " + hum + "%</p>");
-    $("#weatherView").append(box);
+function loadWeather() {
+    weather.forEach(element => {
+        var box = $("<div>").addClass("weatherBox");
+        $(box).append("<h3>" + element.date + "</h3>").append("<p>Temperature: " + element.temperature + "°C</p>").append("<p>Humidity: " + element.humidity + "%</p>");
+        $("#weatherView").append(box);
+    });
+    weather = new Array();
 }
 
 
