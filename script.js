@@ -3,6 +3,7 @@ var dest = null;
 var start = null;
 var end = null;
 var weather = new Array();
+var flights = new Array();
 
 //WEATHER
 
@@ -155,9 +156,18 @@ function loadWeather() {
 
 
 //FLIGHT/ACTIVITIES
+//FLIGHT 
 
+$("#weatherView .nextBtn").click((e) => {
 
-function amadeusAPI() {
+    alert("!!!");
+
+    getFlight(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
+    
+  
+});
+
+function getFlight(startDate, endDate) {
     $.ajaxSetup({
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
@@ -171,17 +181,94 @@ function amadeusAPI() {
             }
         });
 
-        $.get("https://test.api.amadeus.com/v2/shopping/hotel-offers?cityCode=PAR&latitude=48.8566&longitude=2.3522&checkInDate=2021-05-01&checkOutDate=2021-05-28&adults=1").then((result) => {
-            console.log(result);
-        })
 
-        $.get("https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=YOW&destinationLocationCode=GRU&departureDate=2021-05-01&returnDate=2021-05-28&adults=1&travelClass=ECONOMY&nonStop=false&currencyCode=CAD&max=10").then((results) => {
-            console.log(results);
-        })
+    $.get("https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=YOW&destinationLocationCode=GRU&departureDate=" + startDate + "&returnDate=" + endDate + "&adults=1&travelClass=ECONOMY&nonStop=false&currencyCode=CAD&max=10").then((results) => {
+        console.log(results);
+        results = results.data;
+        results.forEach (el => {
+            var itinerary = el.itineraries;
+            var tripStart = itinerary[0].segments.first()
+            var tripEnd = itinerary[1].segments.last()
 
-        $.get("https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT&keyword=Toronto&page%5Blimit%5D=10&sort=analytics.travelers.score&view=LIGHT").then((results) => {
-            console.log(results);
-        })
+                var leaveAt = tripStart.departure.at
+                var leaveFrom = tripStart.departure.iataCode
 
+                var arriveAt = tripEnd.arrival.at
+                var arriveTo = tripEnd.arrival.iataCode
+
+                var price = el.price.total
+
+                var flightOption = {'departure-place': leaveFrom, 'departure-time': leaveAt, 'arrival-place': arriveTo, 'arrival-time': arriveAt, 'price': price};
+                flights.push(flightOption);
+            })
+       
+        
     })
+    
+});
 }
+
+
+function loadFlight(source,dura,price,total) {
+    var flightBox = $("<div>").addClass("flightBox");
+    $(flightBox).append("<h3>"+source + "</h3>").append("<p>Duration" + dura+ "</p>").append("<p>Price:"+ price + total + "</p>");
+    $("#flightsList").append(flightBox);
+}
+
+
+$("#actBtn").click((e) => {
+
+    e.preventDefault();
+
+    cityLat = $("#latitute").val();
+    cityLong = $("#longtitude").val();
+    radius = $("#radius").val();
+
+    getActivity();
+
+
+});
+
+//Activities
+// function getActivity() {
+//     $.ajaxSetup({
+//         headers: {
+//             "Content-Type": "application/x-www-form-urlencoded"
+//         }
+//     })
+//     $.post("https://test.api.amadeus.com/v1/security/oauth2/token", { "grant_type": "client_credentials", "client_id": "FGNpTg4n2DkJofCZY7PIpWNtOR5fy9t1", "client_secret": "4kYmZQhOSQ562MJg" }).then((token) => {
+//         console.log(token)
+//         $.ajaxSetup({
+//             headers: {
+//                 'Authorization': "Bearer " + token.access_token
+//             }
+//         });
+//     })
+
+// $.get("https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=YOW&destinationLocationCode=GRU&departureDate=" + start.format("YYYY-MM-DD") + "&returnDate=" + end.format("YYYY-MM-DD") + "&adults=1&travelClass=ECONOMY&nonStop=false&currencyCode=CAD&max=10").then((results) => {
+//     console.log(results);
+// })
+
+// function getActivity() {
+//     $.ajaxSetup({
+//         headers: {
+//             "Content-Type": "application/x-www-form-urlencoded"
+//         }
+//     })
+//     $.post("https://test.api.amadeus.com/v1/security/oauth2/token", { "grant_type": "client_credentials", "client_id": "FGNpTg4n2DkJofCZY7PIpWNtOR5fy9t1", "client_secret": "4kYmZQhOSQ562MJg" }).then((token) => {
+//         console.log(token)
+//         $.ajaxSetup({
+//             headers: {
+//                 'Authorization': "Bearer " + token.access_token
+//             }
+//         });
+
+
+//     })
+//         $.get("https://test.api.amadeus.com/v1/shopping/activities?latitude=" + cityLat + "&longitude=" + cityLong + "&radius=" + radius).then((response) => {
+//             console.log(response);
+//         })
+
+
+   
+// };
