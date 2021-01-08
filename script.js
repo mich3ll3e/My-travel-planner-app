@@ -1,6 +1,6 @@
 var trip = { 'start': null, 'end': null, 'flight': null, 'activities': null, 'price': 0 };
-var city = null;
-var dest = null;
+var cityID = null;
+var destID = null;
 var startDate = null;
 var endDate = null;
 var weather = new Array();
@@ -14,8 +14,8 @@ $("#submitBtn").click((e) => {
     e.preventDefault();
 
 
-    city = $("#currentcity").find(":selected").data("iata");
-    dest = $("#destination").val();
+    cityID = $("#currentcity").find(":selected").data("index");
+    destID = $("#destination").find(":selected").data("index");
     startDate = $("#startdate").val();
     endDate = $("#enddate").val();
 
@@ -37,10 +37,10 @@ function datesCheck(type) {
     var error = $("<p>");
     error.addClass("error");
     if (type == "") {
-        if (!city) {
+        if (!cityID) {
             error.text("Please choose a valid city")
             $("#currentcity").after(error);
-        } else if (dest == "") {
+        } else if (destID == "") {
             error.text("Please choose a valid city")
             $("#destination").after(error);
         }
@@ -94,7 +94,7 @@ function lookForWeather() {
 
 async function getForecast(startDate, endDate) {
     const forecast = new Promise((resolve, reject) => {
-        $.get("http://api.worldweatheronline.com/premium/v1/weather.ashx?q=" + dest + "&tp=12&format=json&key=6dda14a8cc53490d9fd201404210301").then(result => {
+        $.get("http://api.worldweatheronline.com/premium/v1/weather.ashx?q=" + toCity[destID].name + "&tp=12&format=json&key=6dda14a8cc53490d9fd201404210301").then(result => {
             result = result.data.weather;
             result.forEach(element => {
                 let date = moment(element.date);
@@ -114,7 +114,7 @@ async function getForecast(startDate, endDate) {
 
 async function getHistorical(startDate, endDate) {
     const historical = new Promise((resolve, reject) => {
-        $.get("https://api.worldweatheronline.com/premium/v1/past-weather.ashx?q=" + dest + "&date=" + startDate.format('YYYY-MM-DD') + "&enddate=" + endDate.format('YYYY-MM-DD') + "&tp=12&format=json&key=6dda14a8cc53490d9fd201404210301").then(result => {
+        $.get("https://api.worldweatheronline.com/premium/v1/past-weather.ashx?q=" + toCity[destID].name + "&date=" + startDate.format('YYYY-MM-DD') + "&enddate=" + endDate.format('YYYY-MM-DD') + "&tp=12&format=json&key=6dda14a8cc53490d9fd201404210301").then(result => {
             result = result.data.weather;
             result.forEach(element => {
                 var weatherDate = element.hourly[1];
@@ -174,8 +174,13 @@ function loadWeather() {
 $("#weatherSection .nextBtn").click((e) => {
     trip.start = startDate;
     trip.end = endDate;
-    getFlight(startDate, endDate).then(() => {
-        loadFlight();
+    getFlight(startDate, endDate).then((result) => {
+        if (result == "noItems") {
+            $("#flightsList").append("<p>No available flights</p>");
+        } else {
+            loadFlight();
+        }
+
         $("#weatherSection").hide();
         $("#flightSection").show();
     });
@@ -194,32 +199,38 @@ async function getFlight(startDate, endDate) {
                     'Authorization': "Bearer " + token.access_token
                 }
             });
-            $.get("https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=" + city + "&destinationLocationCode=GRU&departureDate=" + startDate + "&returnDate=" + endDate + "&adults=1&travelClass=ECONOMY&nonStop=false&currencyCode=CAD&max=10").then((results) => {
+            $.get("https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=" + fromCity[cityID].iata + "&destinationLocationCode=" + toCity[destID].iata + "&departureDate=" + startDate + "&returnDate=" + endDate + "&adults=1&travelClass=ECONOMY&nonStop=false&currencyCode=CAD&max=10").then((results) => {
                 console.log(results);
-                results = results.data;
-                results.forEach(el => {
-                    var itinerary = el.itineraries;
-                    var leaveHome = itinerary[0].segments[0]
-                    var arriveDest = itinerary[0].segments[itinerary[0].segments.length - 1]
+                if (results.meta.count != 0) {
+                    results = results.data;
+                    results.forEach(el => {
+                        var itinerary = el.itineraries;
+                        var leaveHome = itinerary[0].segments[0]
+                        var arriveDest = itinerary[0].segments[itinerary[0].segments.length - 1]
 
-                    var leaveHomeTime = moment(leaveHome.departure.at, 'YYYY-MM-DDThh:mm:ss').format("YYYY-MM-DD, hh:mm A");
-                    var homeLocation = leaveHome.departure.iataCode;
+                        var leaveHomeTime = moment(leaveHome.departure.at, 'YYYY-MM-DDThh:mm:ss').format("YYYY-MM-DD, hh:mm A");
+                        var homeLocation = leaveHome.departure.iataCode;
 
-                    var arriveDestTime = moment(arriveDest.arrival.at, 'YYYY-MM-DDThh:mm:ss').format("YYYY-MM-DD, hh:mm A");
-                    var destLocation = arriveDest.arrival.iataCode;
+                        var arriveDestTime = moment(arriveDest.arrival.at, 'YYYY-MM-DDThh:mm:ss').format("YYYY-MM-DD, hh:mm A");
+                        var destLocation = arriveDest.arrival.iataCode;
 
-                    var leaveDest = itinerary[1].segments[0];
-                    var arriveHome = itinerary[1].segments[itinerary[1].segments.length - 1];
+                        var leaveDest = itinerary[1].segments[0];
+                        var arriveHome = itinerary[1].segments[itinerary[1].segments.length - 1];
 
-                    var leaveDestTime = moment(leaveDest.departure.at, 'YYYY-MM-DDThh:mm:ss').format("YYYY-MM-DD, hh:mm A");
-                    var arriveHomeTime = moment(arriveHome.arrival.at, 'YYYY-MM-DDThh:mm:ss').format("YYYY-MM-DD, hh:mm A");
+                        var leaveDestTime = moment(leaveDest.departure.at, 'YYYY-MM-DDThh:mm:ss').format("YYYY-MM-DD, hh:mm A");
+                        var arriveHomeTime = moment(arriveHome.arrival.at, 'YYYY-MM-DDThh:mm:ss').format("YYYY-MM-DD, hh:mm A");
 
-                    var price = el.price.total;
+                        var price = el.price.total;
 
-                    var flightOption = { 'home': homeLocation, 'dest': destLocation, 'departureHomeTime': leaveHomeTime, 'arrivalDestTime': arriveDestTime, 'departureDestTime': leaveDestTime, 'arrivalHomeTime': arriveHomeTime, 'price': price };
-                    flights.push(flightOption);
-                });
-                resolve(true);
+                        var flightOption = { 'home': homeLocation, 'dest': destLocation, 'departureHomeTime': leaveHomeTime, 'arrivalDestTime': arriveDestTime, 'departureDestTime': leaveDestTime, 'arrivalHomeTime': arriveHomeTime, 'price': price };
+                        flights.push(flightOption);
+
+                    });
+                    resolve(true);
+                } else {
+                    resolve("noItems");
+                }
+
             }).catch(e => {
                 reject(false);
             });
@@ -273,10 +284,6 @@ $("#flightSection .nextBtn").click((e) => {
 
 
 
-
-
-
-
 //ACTIVITIES
 
 
@@ -284,9 +291,8 @@ $("#actBtn").click((e) => {
 
     e.preventDefault();
 
-    cityLat = $("#latitute").val();
-    cityLong = $("#longtitude").val();
-    radius = $("#radius").val();
+    cityLat = toCity[destID].latitude;
+    cityLong = toCity[destID].longitude;
 
     getActivity();
 
