@@ -9,6 +9,11 @@ var activities = new Array ();
 var chosenFlight = null;
 var chosenActivities = new Array ();
 
+function modal(){
+
+    $("#modal").toggleClass("flex");
+}
+
 //WEATHER
 
 $("#submitBtn").click((e) => {
@@ -62,6 +67,7 @@ function datesCheck(type) {
         }
 
         $("#weatherView").empty();
+        modal();
         lookForWeather();
     }
 }
@@ -154,6 +160,7 @@ function loadWeather() {
     });
     weather = new Array();
     $("form").hide();
+    modal();
     $("#weatherSection").show();
 }
 
@@ -174,6 +181,7 @@ function loadWeather() {
 //FLIGHT 
 
 $("#weatherSection .nextBtn").click((e) => {
+    modal();
     trip.start = startDate;
     trip.end = endDate;
     getFlight(startDate, endDate).then((result) => {
@@ -185,6 +193,7 @@ $("#weatherSection .nextBtn").click((e) => {
 
         $("#weatherSection").hide();
         $("#flightSection").show();
+        modal();
     });
 });
 
@@ -262,11 +271,12 @@ $(document).on('click', '.flightBox', function (e) {
 $("#flightSection .nextBtn").click((e) => {
     $(".error").remove();  //remove any displayed errors from previous search
     if (chosenFlight != null) {
+        modal();
         $("#flightSection").hide();
         // $("#activitiesSection").show();
         loadSummary();
         $("#summarySection").show();
-
+        modal();
     } else {
         var error = $("<p>");
         error.addClass("error");
@@ -353,7 +363,6 @@ function loadSummary() {
     $("<li>").text(`Leave from ${toCity[trip.dest].name} on ${trip.flight.departureDestTime}`).appendTo(tripItenerary);
     $("<li>").text(`Arrive to ${fromCity[trip.home].city}, ${fromCity[trip.home].country} on ${trip.flight.arrivalHomeTime}`).appendTo(tripItenerary);
     
-
 }
 
 $("#summarySection .nextBtn").click(e=>{

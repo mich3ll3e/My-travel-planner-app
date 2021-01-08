@@ -1,6 +1,4 @@
 
-/* Styling for all files */
-
 /* api containers */
 #containers {
     width: 90%;
@@ -139,3 +137,26 @@ label {
   #costChart::after, #itineraryChart::after{
     display: block;
   }
+
+
+#modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(255, 255, 255);
+}
+
+.flex{
+  display: flex !important;
+  justify-content : space-around;
+  align-items: center
+}
+
+#modal img{
+  width: 10%;
+  margin: auto;
+}
