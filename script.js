@@ -194,7 +194,7 @@ async function getFlight(startDate, endDate) {
                     'Authorization': "Bearer " + token.access_token
                 }
             });
-            $.get("https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=YOW&destinationLocationCode=GRU&departureDate=" + startDate + "&returnDate=" + endDate + "&adults=1&travelClass=ECONOMY&nonStop=false&currencyCode=CAD&max=10").then((results) => {
+            $.get("https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=" + city + "&destinationLocationCode=GRU&departureDate=" + startDate + "&returnDate=" + endDate + "&adults=1&travelClass=ECONOMY&nonStop=false&currencyCode=CAD&max=10").then((results) => {
                 console.log(results);
                 results = results.data;
                 results.forEach(el => {
