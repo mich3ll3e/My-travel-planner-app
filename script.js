@@ -1,11 +1,13 @@
-var trip = { 'start': null, 'end': null, 'flight': null, 'activities': null, 'price': 0 };
+var trip = { 'start': null, 'end': null, 'home': null, 'dest':null, 'flight': null, 'activities': new Array(), 'price': 0 };
 var cityID = null;
 var destID = null;
 var startDate = null;
 var endDate = null;
 var weather = new Array();
 var flights = new Array();
+var activities = new Array ();
 var chosenFlight = null;
+var chosenActivities = new Array ();
 
 //WEATHER
 
@@ -200,7 +202,6 @@ async function getFlight(startDate, endDate) {
                 }
             });
             $.get("https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=" + fromCity[cityID].iata + "&destinationLocationCode=" + toCity[destID].iata + "&departureDate=" + startDate + "&returnDate=" + endDate + "&adults=1&travelClass=ECONOMY&nonStop=false&currencyCode=CAD&max=10").then((results) => {
-                console.log(results);
                 if (results.meta.count != 0) {
                     results = results.data;
                     results.forEach(el => {
@@ -261,9 +262,11 @@ $(document).on('click', '.flightBox', function (e) {
 $("#flightSection .nextBtn").click((e) => {
     $(".error").remove();  //remove any displayed errors from previous search
     if (chosenFlight != null) {
-        trip.flight = chosenFlight;
         $("#flightSection").hide();
-        $("#activitiesSection").show();
+        // $("#activitiesSection").show();
+        loadSummary();
+        $("#summarySection").show();
+
     } else {
         var error = $("<p>");
         error.addClass("error");
@@ -297,3 +300,63 @@ $("#actBtn").click((e) => {
     getActivity();
 
 });
+
+
+
+
+
+
+
+
+
+
+
+//Summary
+
+function loadSummary() {
+
+    //Load Trip Info
+    trip.start = startDate;
+    trip.end = endDate;
+    trip.home = cityID;
+    trip.dest = destID;
+    trip.flight = chosenFlight;
+    // forEach.chosenActivities(el=>{
+    //     trip.activities.push(el)
+    // })
+    trip.price = trip.flight.price;
+    // trip.activities.forEach(el=>{
+    //     trip.price += el.price;
+    // })
+
+    //Expenses Chart
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var arrOfArrs = [['Expenses', 'CAD']];
+        arrOfArrs.push( ['Flight', trip.flight.price]);
+        chosenActivities.forEach(el=>{
+            arrOfArrs.push([el.name, el.price]);
+        })
+        var data = google.visualization.arrayToDataTable(arrOfArrs);
+        var options = { 'title': 'Expenses Summary', 'width': 400, 'height': 400 };
+        var chart = new google.visualization.PieChart(document.getElementById("costChart"));
+        chart.draw(data, options);
+    }
+
+
+    //Itinerary List
+    var tripItenerary = $("#itinerary ul");
+
+    $("<li>").text(`Leave from ${fromCity[trip.home].city}, ${fromCity[trip.home].country} on ${trip.flight.departureHomeTime}`).appendTo(tripItenerary);
+    $("<li>").text(`Arrive to ${toCity[trip.dest].name} on ${trip.flight.arrivalDestTime}`).appendTo(tripItenerary);
+    $("<li>").text(`Leave from ${toCity[trip.dest].name} on ${trip.flight.departureDestTime}`).appendTo(tripItenerary);
+    $("<li>").text(`Arrive to ${fromCity[trip.home].city}, ${fromCity[trip.home].country} on ${trip.flight.arrivalHomeTime}`).appendTo(tripItenerary);
+    
+
+}
+
+$("#summarySection .nextBtn").click(e=>{
+    e.preventDefault;
+    localStorage.setItem(`${fromCity[trip.home].city}, ${fromCity[trip.home].country} - ${toCity[trip.dest].name}`, JSON.stringify(trip));
+})

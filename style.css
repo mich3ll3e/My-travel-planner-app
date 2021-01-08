@@ -130,3 +130,12 @@ label {
   .chosenFlight{
     border: solid 3px blue;
   }
+
+
+  #costChart, #itineraryChar{
+    float: left;
+  }
+
+  #costChart::after, #itineraryChart::after{
+    display: block;
+  }
