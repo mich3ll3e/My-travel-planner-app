@@ -1,9 +1,11 @@
+var trip = { 'start': null, 'end': null, 'flight': null, 'activities': null, 'price': 0 };
 var city = null;
 var dest = null;
-var start = null;
-var end = null;
+var startDate = null;
+var endDate = null;
 var weather = new Array();
 var flights = new Array();
+var chosenFlight = null;
 
 //WEATHER
 
@@ -12,48 +14,59 @@ $("#submitBtn").click((e) => {
     e.preventDefault();
 
 
-    city = $("#currentcity").val();
+    city = $("#currentcity").find(":selected").data("iata");
     dest = $("#destination").val();
-    start = moment($("#startdate").val());
-    end = moment($("#enddate").val());
+    startDate = $("#startdate").val();
+    endDate = $("#enddate").val();
 
-    dateCheck("");
+
+    datesCheck("");
 });
 
 $("#updateBtn").click((e) => {
 
     e.preventDefault();
-    start = moment($("#startdateUpdate").val());
-    end = moment($("#enddateUpdate").val());
+    startDate = $("#startdateUpdate").val();
+    endDate = $("#enddateUpdate").val();
 
-    dateCheck("Update");
+    datesCheck("Update");
 });
 
-function dateCheck(type) {
+function datesCheck(type) {
     $(".error").remove();  //remove any displayed errors from previous search
-    $("#weatherView").empty();
     var error = $("<p>");
     error.addClass("error");
-    if (start.diff(moment(), 'days') < 0) { //if start date is in the past, display error
-        error.text("Start date cannot be in the past")
+    if (type == "") {
+        if (!city) {
+            error.text("Please choose a valid city")
+            $("#currentcity").after(error);
+        } else if (dest == "") {
+            error.text("Please choose a valid city")
+            $("#destination").after(error);
+        }
+    }
+    if (moment(startDate).diff(moment(), 'days') < 0 || !startDate) { //if start date is in the past, display error
+        error.text("Please choose a valid date")
         $("#startdate" + type).after(error);
-    } else if (end.diff(start) < 0) { //if end date is before start date, display error
+    } else if (moment(endDate).diff(moment(startDate)) < 0 || !endDate) { //if end date is before start date, display error
         error.text("End date cannot be before the start date")
         $("#enddate" + type).after(error);
     } else { //else, get the weather
         var stUp = $("#startdateUpdate");
         var enUp = $("#enddateUpdate");
-        if(stUp.val()=="" || enUp.val()==""){
+        if (stUp.val() == "" || enUp.val() == "") {
             stUp.val($("#startdate").val());
             enUp.val($("#enddate").val());
         }
-        $("#startdate").val("");
-        $("#enddate").val("");
+
+        $("#weatherView").empty();
         lookForWeather();
     }
 }
 
 function lookForWeather() {
+    var start = moment(startDate);
+    var end = moment(endDate);
     if (start.diff(moment(), 'days') >= 13) { //if start date is past 14 days (the limit of weather forecast), then use historical date
         var years = start.diff(moment(), 'years') + 1;  //find difference between start date year and current year
         start = start.subtract(years, 'years');         //decrement start date year to become 1 less current year
@@ -68,11 +81,11 @@ function lookForWeather() {
         });
     } else { //else, use forecast date on days within 14 days, and historical data on days beyond 14 days.
         var forecastEnd = moment().add(13, 'days');
-        getForecast(start, forecastEnd.format("YYYY-MM-DD")).then(() => {
+        getForecast(start, forecastEnd).then(() => {
             var histStart = moment().subtract(1, 'years').add(14, 'days');  //decrement end date year by 1, and add 1 day
             var years = end.diff(moment(), 'years') + 1;                    //find difference between end date year and current year
-            end = end.subtract(years, 'years');                             //decrement end date year to become 1 less current year
-            getHistorical(histStart, end).then(() => {
+            var newEnd = end.subtract(years, 'years');                             //decrement end date year to become 1 less current year
+            getHistorical(histStart, newEnd).then(() => {
                 loadWeather();
             });
         });
@@ -81,7 +94,6 @@ function lookForWeather() {
 
 async function getForecast(startDate, endDate) {
     const forecast = new Promise((resolve, reject) => {
-        endDate = moment(endDate);
         $.get("http://api.worldweatheronline.com/premium/v1/weather.ashx?q=" + dest + "&tp=12&format=json&key=6dda14a8cc53490d9fd201404210301").then(result => {
             result = result.data.weather;
             result.forEach(element => {
@@ -139,6 +151,8 @@ function loadWeather() {
         $("#weatherView").append(box);
     });
     weather = new Array();
+    $("form").hide();
+    $("#weatherSection").show();
 }
 
 
@@ -155,65 +169,115 @@ function loadWeather() {
 
 
 
-//FLIGHT/ACTIVITIES
 //FLIGHT 
 
-$("#weatherView .nextBtn").click((e) => {
-
-    alert("!!!");
-
-    getFlight(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
-    
-  
+$("#weatherSection .nextBtn").click((e) => {
+    trip.start = startDate;
+    trip.end = endDate;
+    getFlight(startDate, endDate).then(() => {
+        loadFlight();
+        $("#weatherSection").hide();
+        $("#flightSection").show();
+    });
 });
 
-function getFlight(startDate, endDate) {
-    $.ajaxSetup({
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        }
-    })
-    $.post("https://test.api.amadeus.com/v1/security/oauth2/token", { "grant_type": "client_credentials", "client_id": "FGNpTg4n2DkJofCZY7PIpWNtOR5fy9t1", "client_secret": "4kYmZQhOSQ562MJg" }).then((token) => {
-        console.log(token)
+async function getFlight(startDate, endDate) {
+    const flightResults = new Promise((resolve, reject) => {
         $.ajaxSetup({
             headers: {
-                'Authorization': "Bearer " + token.access_token
+                "Content-Type": "application/x-www-form-urlencoded"
             }
+        })
+        $.post("https://test.api.amadeus.com/v1/security/oauth2/token", { "grant_type": "client_credentials", "client_id": "FGNpTg4n2DkJofCZY7PIpWNtOR5fy9t1", "client_secret": "4kYmZQhOSQ562MJg" }).then((token) => {
+            $.ajaxSetup({
+                headers: {
+                    'Authorization': "Bearer " + token.access_token
+                }
+            });
+            $.get("https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=YOW&destinationLocationCode=GRU&departureDate=" + startDate + "&returnDate=" + endDate + "&adults=1&travelClass=ECONOMY&nonStop=false&currencyCode=CAD&max=10").then((results) => {
+                console.log(results);
+                results = results.data;
+                results.forEach(el => {
+                    var itinerary = el.itineraries;
+                    var leaveHome = itinerary[0].segments[0]
+                    var arriveDest = itinerary[0].segments[itinerary[0].segments.length - 1]
+
+                    var leaveHomeTime = moment(leaveHome.departure.at, 'YYYY-MM-DDThh:mm:ss').format("YYYY-MM-DD, hh:mm A");
+                    var homeLocation = leaveHome.departure.iataCode;
+
+                    var arriveDestTime = moment(arriveDest.arrival.at, 'YYYY-MM-DDThh:mm:ss').format("YYYY-MM-DD, hh:mm A");
+                    var destLocation = arriveDest.arrival.iataCode;
+
+                    var leaveDest = itinerary[1].segments[0];
+                    var arriveHome = itinerary[1].segments[itinerary[1].segments.length - 1];
+
+                    var leaveDestTime = moment(leaveDest.departure.at, 'YYYY-MM-DDThh:mm:ss').format("YYYY-MM-DD, hh:mm A");
+                    var arriveHomeTime = moment(arriveHome.arrival.at, 'YYYY-MM-DDThh:mm:ss').format("YYYY-MM-DD, hh:mm A");
+
+                    var price = el.price.total;
+
+                    var flightOption = { 'home': homeLocation, 'dest': destLocation, 'departureHomeTime': leaveHomeTime, 'arrivalDestTime': arriveDestTime, 'departureDestTime': leaveDestTime, 'arrivalHomeTime': arriveHomeTime, 'price': price };
+                    flights.push(flightOption);
+                });
+                resolve(true);
+            }).catch(e => {
+                reject(false);
+            });
         });
+    });
+    return flightResults;
+}
 
 
-    $.get("https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=YOW&destinationLocationCode=GRU&departureDate=" + startDate + "&returnDate=" + endDate + "&adults=1&travelClass=ECONOMY&nonStop=false&currencyCode=CAD&max=10").then((results) => {
-        console.log(results);
-        results = results.data;
-        results.forEach (el => {
-            var itinerary = el.itineraries;
-            var tripStart = itinerary[0].segments.first()
-            var tripEnd = itinerary[1].segments.last()
-
-                var leaveAt = tripStart.departure.at
-                var leaveFrom = tripStart.departure.iataCode
-
-                var arriveAt = tripEnd.arrival.at
-                var arriveTo = tripEnd.arrival.iataCode
-
-                var price = el.price.total
-
-                var flightOption = {'departure-place': leaveFrom, 'departure-time': leaveAt, 'arrival-place': arriveTo, 'arrival-time': arriveAt, 'price': price};
-                flights.push(flightOption);
-            })
-       
-        
+function loadFlight() {
+    flights.forEach((el, index) => {
+        var flightBox = $("<div>").addClass("flightBox").attr("data-id", index).attr("tabindex", "1");
+        $(flightBox).append(`<p>Leave from: ${el.home} on: ${el.departureHomeTime}</p>`).append(`<p>To: ${el.dest} on: ${el.arrivalDestTime}</p>`).append(`<hr><p>Leave from: ${el.dest} on: ${el.departureDestTime}</p>`).append(`<p>Arrive to: ${el.home} on: ${el.arrivalHomeTime}</p>`).append(`<hr><p>Price: CAD ${el.price}</p>`);
+        $("#flightsList").append(flightBox);
     })
-    
+}
+
+$(document).on('click', '.flightBox', function (e) {
+    e.preventDefault();
+    var selection = $(this)
+    $(".flightBox").removeClass("chosenFlight")  //remove class from previously selected flight
+    selection.addClass("chosenFlight")           //add it to newly selected flight
+
+    var flightID = selection.data("id");        //get index of flight in flights array
+    chosenFlight = flights[flightID];           //add object to chosenFlight variable
+})
+
+$("#flightSection .nextBtn").click((e) => {
+    $(".error").remove();  //remove any displayed errors from previous search
+    if (chosenFlight != null) {
+        trip.flight = chosenFlight;
+        $("#flightSection").hide();
+        $("#activitiesSection").show();
+    } else {
+        var error = $("<p>");
+        error.addClass("error");
+        error.text("Please choose a flight option.");
+        $("#flightsList").after(error);
+    }
 });
-}
 
 
-function loadFlight(source,dura,price,total) {
-    var flightBox = $("<div>").addClass("flightBox");
-    $(flightBox).append("<h3>"+source + "</h3>").append("<p>Duration" + dura+ "</p>").append("<p>Price:"+ price + total + "</p>");
-    $("#flightsList").append(flightBox);
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//ACTIVITIES
 
 
 $("#actBtn").click((e) => {
@@ -226,49 +290,4 @@ $("#actBtn").click((e) => {
 
     getActivity();
 
-
 });
-
-//Activities
-// function getActivity() {
-//     $.ajaxSetup({
-//         headers: {
-//             "Content-Type": "application/x-www-form-urlencoded"
-//         }
-//     })
-//     $.post("https://test.api.amadeus.com/v1/security/oauth2/token", { "grant_type": "client_credentials", "client_id": "FGNpTg4n2DkJofCZY7PIpWNtOR5fy9t1", "client_secret": "4kYmZQhOSQ562MJg" }).then((token) => {
-//         console.log(token)
-//         $.ajaxSetup({
-//             headers: {
-//                 'Authorization': "Bearer " + token.access_token
-//             }
-//         });
-//     })
-
-// $.get("https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=YOW&destinationLocationCode=GRU&departureDate=" + start.format("YYYY-MM-DD") + "&returnDate=" + end.format("YYYY-MM-DD") + "&adults=1&travelClass=ECONOMY&nonStop=false&currencyCode=CAD&max=10").then((results) => {
-//     console.log(results);
-// })
-
-// function getActivity() {
-//     $.ajaxSetup({
-//         headers: {
-//             "Content-Type": "application/x-www-form-urlencoded"
-//         }
-//     })
-//     $.post("https://test.api.amadeus.com/v1/security/oauth2/token", { "grant_type": "client_credentials", "client_id": "FGNpTg4n2DkJofCZY7PIpWNtOR5fy9t1", "client_secret": "4kYmZQhOSQ562MJg" }).then((token) => {
-//         console.log(token)
-//         $.ajaxSetup({
-//             headers: {
-//                 'Authorization': "Bearer " + token.access_token
-//             }
-//         });
-
-
-//     })
-//         $.get("https://test.api.amadeus.com/v1/shopping/activities?latitude=" + cityLat + "&longitude=" + cityLong + "&radius=" + radius).then((response) => {
-//             console.log(response);
-//         })
-
-
-   
-// };
