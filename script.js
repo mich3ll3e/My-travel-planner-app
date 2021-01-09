@@ -210,6 +210,21 @@ async function getFlight(startDate, endDate) {
                     'Authorization': "Bearer " + token.access_token
                 }
             });
+            $.get("https://test.api.amadeus.com/v1/shopping/activities?latitude=" + toCity[destID].latitude+ "&longitude="+ toCity[destID].longitude+ "&radius=1").then((response)=>{
+                if (response.meta.count != 0) {
+                      response=response.data;  
+                      response.forEach(ele => {
+                        var activity = ele.name;
+                        var description = ele.shortDescription;
+                        var imgURL =ele.pictures;
+                        var booking = ele.bookingLink;
+                        var currency = ele.currencyCode;
+                        var amount = ele.amount;
+                        var activityList = {'activity':activity,'description':description,'picture':imgURL,'Link':booking, 'currency':currency, 'amount':amount};
+                        activities.push(activityList);
+                      });
+                }
+                });
             $.get("https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=" + fromCity[cityID].iata + "&destinationLocationCode=" + toCity[destID].iata + "&departureDate=" + startDate + "&returnDate=" + endDate + "&adults=1&travelClass=ECONOMY&nonStop=false&currencyCode=CAD&max=10").then((results) => {
                 if (results.meta.count != 0) {
                     results = results.data;
@@ -300,17 +315,30 @@ $("#flightSection .nextBtn").click((e) => {
 //ACTIVITIES
 
 
-$("#actBtn").click((e) => {
-
+$("#flightSection .nextBtn").click((e) => {
+    modal()
     e.preventDefault();
 
     cityLat = toCity[destID].latitude;
     cityLong = toCity[destID].longitude;
 
-    getActivity();
-
+    loadAct();
+    $("#flightSection").hide();
+    $("#activitiesSection").show();
+    // loadSummary();
+    // $("#summarySection").show();
+    modal();
+    
 });
 
+
+function loadAct() {
+    activities.forEach((el, index) => {
+        var actBox = $("<div>").addClass("activityBox").attr("data-id", index).attr("tabindex", "1");
+        $(actBox).append(`<p>Activity: ${el.activity}</p>`).append(`<p>Description: ${el.description}</p>`).append(`<img>${el.imgURL} </img>`).append(`<hr><p>Price:${el.currency} ${el.amount}</p>`).append(`<p>Booking Link: ${el.booking} </p>`);
+        $("#activitiesList").append(actBox);
+    });
+};
 
 
 
@@ -325,43 +353,43 @@ $("#actBtn").click((e) => {
 
 function loadSummary() {
 
-    //Load Trip Info
-    trip.start = startDate;
-    trip.end = endDate;
-    trip.home = cityID;
-    trip.dest = destID;
-    trip.flight = chosenFlight;
+    // //Load Trip Info
+    // trip.start = startDate;
+    // trip.end = endDate;
+    // trip.home = cityID;
+    // trip.dest = destID;
+    // trip.flight = chosenFlight;
     // forEach.chosenActivities(el=>{
     //     trip.activities.push(el)
     // })
-    trip.price = trip.flight.price;
+    // trip.price = trip.flight.price;
     // trip.activities.forEach(el=>{
     //     trip.price += el.price;
     // })
 
-    //Expenses Chart
-    google.charts.load('current', { 'packages': ['corechart'] });
-    google.charts.setOnLoadCallback(drawChart);
-    function drawChart() {
-        var arrOfArrs = [['Expenses', 'CAD']];
-        arrOfArrs.push( ['Flight', trip.flight.price]);
-        chosenActivities.forEach(el=>{
-            arrOfArrs.push([el.name, el.price]);
-        })
-        var data = google.visualization.arrayToDataTable(arrOfArrs);
-        var options = { 'title': 'Expenses Summary', 'width': 400, 'height': 400 };
-        var chart = new google.visualization.PieChart(document.getElementById("costChart"));
-        chart.draw(data, options);
-    }
+    // //Expenses Chart
+    // google.charts.load('current', { 'packages': ['corechart'] });
+    // google.charts.setOnLoadCallback(drawChart);
+    // function drawChart() {
+    //     var arrOfArrs = [['Expenses', 'CAD']];
+    //     arrOfArrs.push( ['Flight', trip.flight.price]);
+    //     chosenActivities.forEach(el=>{
+    //         arrOfArrs.push([el.name, el.price]);
+    //     })
+    //     var data = google.visualization.arrayToDataTable(arrOfArrs);
+    //     var options = { 'title': 'Expenses Summary', 'width': 400, 'height': 400 };
+    //     var chart = new google.visualization.PieChart(document.getElementById("costChart"));
+    //     chart.draw(data, options);
+    // }
 
 
-    //Itinerary List
-    var tripItenerary = $("#itinerary ul");
+    // //Itinerary List
+    // var tripItenerary = $("#itinerary ul");
 
-    $("<li>").text(`Leave from ${fromCity[trip.home].city}, ${fromCity[trip.home].country} on ${trip.flight.departureHomeTime}`).appendTo(tripItenerary);
-    $("<li>").text(`Arrive to ${toCity[trip.dest].name} on ${trip.flight.arrivalDestTime}`).appendTo(tripItenerary);
-    $("<li>").text(`Leave from ${toCity[trip.dest].name} on ${trip.flight.departureDestTime}`).appendTo(tripItenerary);
-    $("<li>").text(`Arrive to ${fromCity[trip.home].city}, ${fromCity[trip.home].country} on ${trip.flight.arrivalHomeTime}`).appendTo(tripItenerary);
+    // $("<li>").text(`Leave from ${fromCity[trip.home].city}, ${fromCity[trip.home].country} on ${trip.flight.departureHomeTime}`).appendTo(tripItenerary);
+    // $("<li>").text(`Arrive to ${toCity[trip.dest].name} on ${trip.flight.arrivalDestTime}`).appendTo(tripItenerary);
+    // $("<li>").text(`Leave from ${toCity[trip.dest].name} on ${trip.flight.departureDestTime}`).appendTo(tripItenerary);
+    // $("<li>").text(`Arrive to ${fromCity[trip.home].city}, ${fromCity[trip.home].country} on ${trip.flight.arrivalHomeTime}`).appendTo(tripItenerary);
     
 }
 
