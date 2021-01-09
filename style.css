@@ -64,10 +64,11 @@ label {
 
   .flightBox{
     background-color: white;
-    width: 40%;
-    height: 220px;
+    width: 350px;
     margin: 5px;
+    padding: 5px;
     display: inline-block;
+    border: solid 1px rgb(66, 141, 226);
   }
 
 *:focus{
