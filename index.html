@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/css/foundation.min.css" integrity="sha256-ogmFxjqiTMnZhxCqVmcqTvjfe1Y/ec4WaRj/aQPvn+I=" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
@@ -16,8 +17,8 @@
     <header>
         <h1>My Travel Plan</h1>
     </header>
-    <main id="container">
-        <form>
+    <main class="grid-x">
+        <form class="cell medium-10 medium-offset-1 large-8 large-offset-2">
             <label>
                 <select type="city" id="currentcity" required>
                     <option value="" disabled selected>Choose a Canada/US airport</option>
@@ -28,7 +29,7 @@
                 <select type="city" id="destination" required>
                     <option value="" disabled selected>Choose a destination</option>
                 </select>
-                <div class="label-text">Destination</div>
+                <div class="label-text">Travelling To</div>
             </label>
             <label>
                 <input type="date" id="startdate" required />
@@ -38,10 +39,10 @@
                 <input type="date" id="enddate" required />
                 <div class="label-text">End Date</div>
             </label>
-            <button type="submit" id="submitBtn">Submit</button>
             <hr>
+            <button type="submit" class="expanded button" id="submitBtn">Submit</button>
         </form>
-        <div id="weatherSection" hidden>
+        <div id="weatherSection" class="cell medium-10 medium-offset-1 large-8 large-offset-2" hidden>
             <h2>Weather</h2>
             <div id="weatherView"></div>
             <label>
@@ -52,39 +53,34 @@
                 <input type="date" id="enddateUpdate" />
                 <div class="label-text">End Date</div>
             </label>
-            <button type="submit" id="updateBtn">Update Date</button>
-            <p>Or</p>
-            <button type="submit" class="nextBtn">Next Step</button>
             <hr>
+            <button type="submit" class="expanded button" id="updateBtn">Update Date</button>
+            <button type="submit" class="expanded button nextBtn">Next Step</button>
         </div>
-        <div id="accomodationSection" hidden>
-            <h2>Accomodation</h2>
-            <div id="hotelsList"></div>
-            <button type="submit" class="nextBtn">Next Step</button>
-            <hr>
-        </div>
-        <div id="flightSection" hidden>
+        <div id="flightSection" class="cell medium-10 medium-offset-1 large-8 large-offset-2" hidden>
             <h2>Flight</h2>
             <div id="flightsList"></div>
-            <button type="submit" class="nextBtn">Next Step</button>
             <hr>
+            <button type="submit" class="expanded button nextBtn">Next Step</button>
         </div>
         <div id="activitiesSection" hidden>
             <h2>Activities</h2>
             <div id="activitiesList"></div>
-            <button type="submit" class="nextBtn">Next Step</button>
             <hr>
+            <button type="submit" class="expanded button nextBtn">Next Step</button>
         </div>
-        <div id="summarySection" hidden>
+        <div id="summarySection" class="cell medium-10 medium-offset-1 large-8 large-offset-2" hidden>
             <h2>Trip Summary</h2>
-            <div id="costChart"></div>
+            <div id="costChart">
+                
+            </div>
             <div id="itinerary">
                 <ul>Your itinerary:
 
                 </ul>
             </div>
-            <button type="submit" class="nextBtn">Save</button>
             <hr>
+            <button type="submit" class="expanded button nextBtn">Save</button>
         </div>
     </main>
     <div id="modal">
