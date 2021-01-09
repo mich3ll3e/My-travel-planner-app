@@ -39,7 +39,7 @@ label {
     
   }
 
-  #weatherView, #flightsList{
+  #weatherView, #flightsList, #activitiesList{
     overflow: auto;
     white-space: nowrap;
     margin: auto;
@@ -62,27 +62,61 @@ label {
     border: solid 1px rgb(66, 141, 226);
   }
 
-  .flightBox{
-    background-color: white;
-    width: 350px;
-    margin: 5px;
-    padding: 5px;
-    display: inline-block;
-    border: solid 1px rgb(66, 141, 226);
-  }
-
-*:focus{
+  *:active, *:focus{
     border: none;
     outline: none;
   }
 
-  .chosenFlight{
-    border: solid 3px blue;
+  .flightBox{
+    background-color: white;
+    width: 350px;
+    height: 220px;
+    margin: 5px;
+    display: inline-block;
+  }
+
+  .activityBox{
+    background-color: white;
+    max-width: 600px;
+    height: 220px;
+    margin: 5px;
+    padding: 5px;
+    display: inline-block;
+    white-space: normal;
+  }
+  
+  .activityBox img, .activityBox div{
+    float: left;
+    width: 50%;
+    height: 100%;
+    border: solid 1px red;
+    font-size: 12pt;    
+    overflow: scroll;
+  }
+
+  .activityBox h3{
+    font-size: 12pt;
+  }
+
+  .chosenActivityFormat{
+    border: solid 3px blue !important;
   }
 
 
-  #costChart, #itineraryChar{
+/* *:focus{
+    border: none;
+    outline: none;
+  } */
+
+  .chosenFlight{
+    border: solid 3px blue !important;
+  }
+
+
+  #costChart, #itinerary{
     float: left;
+    width: 50%;
+    border: solid 3px blue;
   }
 
   #costChart::after, #itineraryChart::after{
