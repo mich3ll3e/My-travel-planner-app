@@ -210,18 +210,19 @@ async function getFlight(startDate, endDate) {
                     'Authorization': "Bearer " + token.access_token
                 }
             });
-            $.get("https://test.api.amadeus.com/v1/shopping/activities?latitude=" + toCity[destID].latitude+ "&longitude="+ toCity[destID].longitude+ "&radius=1").then((response)=>{
+            $.get("https://test.api.amadeus.com/v1/shopping/activities?latitude=" + toCity[destID].latitude+ "&longitude="+ toCity[destID].longitude+ "&radius=20").then((response)=>{
                 if (response.meta.count != 0) {
                       response=response.data;  
-                      response.forEach(ele => {
-                        var activity = ele.name;
-                        var description = ele.shortDescription;
-                        var imgURL =ele.pictures;
-                        var booking = ele.bookingLink;
-                        var currency = ele.currencyCode;
-                        var amount = ele.amount;
-                        var activityList = {'activity':activity,'description':description,'picture':imgURL,'Link':booking, 'currency':currency, 'amount':amount};
+                      console.log(response)
+                      response.forEach(el => {
+                        var activity = el.name;
+                        var description = el.shortDescription;
+                        var imgURL =el.pictures[0];
+                        var currency = el.price.currencyCode;
+                        var amount = el.price.amount;
+                        var activityList = {'activity':activity,'description':description,'picture':imgURL, 'currency':currency, 'amount':amount};
                         activities.push(activityList);
+                        console.log(activityList);
                       });
                 }
                 });
@@ -333,16 +334,13 @@ $("#flightSection .nextBtn").click((e) => {
 
 
 function loadAct() {
+    console.log(activities)
     activities.forEach((el, index) => {
         var actBox = $("<div>").addClass("activityBox").attr("data-id", index).attr("tabindex", "1");
-        $(actBox).append(`<p>Activity: ${el.activity}</p>`).append(`<p>Description: ${el.description}</p>`).append(`<img>${el.imgURL} </img>`).append(`<hr><p>Price:${el.currency} ${el.amount}</p>`).append(`<p>Booking Link: ${el.booking} </p>`);
+        $(actBox).append(`<p>Activity: ${el.activity}</p>`).append(`<p>Description: ${el.description}</p>`).append(`<img src=${el.picture}>`).append(`<hr><p>Price:${el.currency} ${el.amount}</p>`);
         $("#activitiesList").append(actBox);
     });
 };
-
-
-
-
 
 
 
