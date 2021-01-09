@@ -7,7 +7,9 @@ var weather = new Array();
 var flights = new Array();
 var activities = new Array ();
 var chosenFlight = null;
+var chosenActivitiesIndex = new Array();
 var chosenActivities = new Array ();
+
 
 function modal(){
 
@@ -218,9 +220,8 @@ async function getFlight(startDate, endDate) {
                         var activity = el.name;
                         var description = el.shortDescription;
                         var imgURL =el.pictures[0];
-                        var currency = el.price.currencyCode;
-                        var amount = el.price.amount;
-                        var activityList = {'activity':activity,'description':description,'picture':imgURL, 'currency':currency, 'amount':amount};
+                        var amount = el.price.amount * 1.55;
+                        var activityList = {'activity':activity,'description':description,'picture':imgURL, 'price':amount};
                         activities.push(activityList);
                         console.log(activityList);
                       });
@@ -286,12 +287,12 @@ $(document).on('click', '.flightBox', function (e) {
 
 $("#flightSection .nextBtn").click((e) => {
     $(".error").remove();  //remove any displayed errors from previous search
+    e.preventDefault();
     if (chosenFlight != null) {
         modal();
+        loadAct();
         $("#flightSection").hide();
-        // $("#activitiesSection").show();
-        loadSummary();
-        $("#summarySection").show();
+        $("#activitiesSection").show();
         modal();
     } else {
         var error = $("<p>");
@@ -315,34 +316,46 @@ $("#flightSection .nextBtn").click((e) => {
 
 //ACTIVITIES
 
-
-$("#flightSection .nextBtn").click((e) => {
-    modal()
-    e.preventDefault();
-
-    cityLat = toCity[destID].latitude;
-    cityLong = toCity[destID].longitude;
-
-    loadAct();
-    $("#flightSection").hide();
-    $("#activitiesSection").show();
-    // loadSummary();
-    // $("#summarySection").show();
-    modal();
-    
-});
-
-
 function loadAct() {
     console.log(activities)
     activities.forEach((el, index) => {
         var actBox = $("<div>").addClass("activityBox").attr("data-id", index).attr("tabindex", "1");
-        $(actBox).append(`<p>Activity: ${el.activity}</p>`).append(`<p>Description: ${el.description}</p>`).append(`<img src=${el.picture}>`).append(`<hr><p>Price:${el.currency} ${el.amount}</p>`);
+        $(actBox).append(`<h3>${el.activity}</h3>`).append(`<div><p>Description: ${el.description}</p></div>`).append(`<img src=${el.picture}>`).append(`<hr><p>Price:CAD${el.price}</p>`);
         $("#activitiesList").append(actBox);
+   
+   
     });
 };
 
+ $(document).on('click', '.activityBox', function (e) {
+     e.preventDefault();
+    var actID = $(this).data("id")
+    var box = $(this);
+    console.log(chosenActivitiesIndex.includes(actID));
+    if(chosenActivitiesIndex.includes(actID)){  //if activity already selected
+        $(this).removeClass("chosenActivityFormat");    //remove selection class
+        chosenActivitiesIndex.splice(actID);            // remove activity index from array
+    } else {                                    //else
+        $(box).addClass("chosenActivityFormat");       //add selection class
+        chosenActivitiesIndex.push(actID);              //add index to array
+        chosenActivitiesIndex.sort();                   //sort array
+    }
+ });
 
+ $("#activitiesSection .nextBtn").click((e) => {
+    modal()
+    e.preventDefault();
+
+    chosenActivitiesIndex.forEach(el=>{
+        chosenActivities.push(activities[el]);
+    })
+
+    loadSummary();
+    $("#activitiesSection").hide();
+    $("#summarySection").show();
+    modal();
+    
+});
 
 
 
@@ -351,43 +364,51 @@ function loadAct() {
 
 function loadSummary() {
 
-    // //Load Trip Info
-    // trip.start = startDate;
-    // trip.end = endDate;
-    // trip.home = cityID;
-    // trip.dest = destID;
-    // trip.flight = chosenFlight;
-    // forEach.chosenActivities(el=>{
-    //     trip.activities.push(el)
-    // })
-    // trip.price = trip.flight.price;
-    // trip.activities.forEach(el=>{
-    //     trip.price += el.price;
-    // })
+    //Load Trip Info
+    trip.start = startDate;
+    trip.end = endDate;
+    trip.home = cityID;
+    trip.dest = destID;
+    trip.flight = chosenFlight;
+    chosenActivities.forEach(el=>{
+        trip.activities.push(el)
+    })
+    trip.price = trip.flight.price;
+    trip.activities.forEach(el=>{
+        console.log(el.price);
+        trip.price += el.price;
+    })
 
-    // //Expenses Chart
-    // google.charts.load('current', { 'packages': ['corechart'] });
-    // google.charts.setOnLoadCallback(drawChart);
-    // function drawChart() {
-    //     var arrOfArrs = [['Expenses', 'CAD']];
-    //     arrOfArrs.push( ['Flight', trip.flight.price]);
-    //     chosenActivities.forEach(el=>{
-    //         arrOfArrs.push([el.name, el.price]);
-    //     })
-    //     var data = google.visualization.arrayToDataTable(arrOfArrs);
-    //     var options = { 'title': 'Expenses Summary', 'width': 400, 'height': 400 };
-    //     var chart = new google.visualization.PieChart(document.getElementById("costChart"));
-    //     chart.draw(data, options);
-    // }
+    //Expenses Chart
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var arrOfArrs = [['Expenses', 'CAD']];
+        arrOfArrs.push( ['Flight', Number(trip.flight.price)]);
+        trip.activities.forEach(el=>{
+            arrOfArrs.push([el.activity, el.price]);
+        })
+        var data = google.visualization.arrayToDataTable(arrOfArrs);
+        console.log(data);
+        // var options = {'title': 'Expenses Summary'};
+        var options = { 'title': 'Expenses Summary', 'width': 400, chartArea: {width: '50%'}, legend: {width: '50%'}  };
+
+        var chart = new google.visualization.PieChart(document.getElementById("costChart"));
+        console.log(chart);
+        chart.draw(data, options);
+    }
 
 
-    // //Itinerary List
-    // var tripItenerary = $("#itinerary ul");
+    //Itinerary List
+    var tripItenerary = $("#itinerary ul");
 
-    // $("<li>").text(`Leave from ${fromCity[trip.home].city}, ${fromCity[trip.home].country} on ${trip.flight.departureHomeTime}`).appendTo(tripItenerary);
-    // $("<li>").text(`Arrive to ${toCity[trip.dest].name} on ${trip.flight.arrivalDestTime}`).appendTo(tripItenerary);
-    // $("<li>").text(`Leave from ${toCity[trip.dest].name} on ${trip.flight.departureDestTime}`).appendTo(tripItenerary);
-    // $("<li>").text(`Arrive to ${fromCity[trip.home].city}, ${fromCity[trip.home].country} on ${trip.flight.arrivalHomeTime}`).appendTo(tripItenerary);
+    $("<li>").text(`Leave from ${fromCity[trip.home].city}, ${fromCity[trip.home].country} on ${trip.flight.departureHomeTime}`).appendTo(tripItenerary);
+    $("<li>").text(`Arrive to ${toCity[trip.dest].name} on ${trip.flight.arrivalDestTime}`).appendTo(tripItenerary);
+    trip.activities.forEach(el=>{
+        $("<li>").text(`Visit ${el.activity}`).appendTo(tripItenerary);
+    });
+    $("<li>").text(`Leave from ${toCity[trip.dest].name} on ${trip.flight.departureDestTime}`).appendTo(tripItenerary);
+    $("<li>").text(`Arrive to ${fromCity[trip.home].city}, ${fromCity[trip.home].country} on ${trip.flight.arrivalHomeTime}`).appendTo(tripItenerary);
     
 }
 
