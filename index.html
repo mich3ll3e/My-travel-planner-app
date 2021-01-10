@@ -4,21 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/css/foundation.min.css" integrity="sha256-ogmFxjqiTMnZhxCqVmcqTvjfe1Y/ec4WaRj/aQPvn+I=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/css/foundation.min.css"
+        integrity="sha256-ogmFxjqiTMnZhxCqVmcqTvjfe1Y/ec4WaRj/aQPvn+I=" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Sansita:ital,wght@1,800&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <title>Document</title>
+    <title>My Travel Planner</title>
 </head>
 
 <body>
 
-    <header>
-        <h1>My Travel Plan</h1>
+    <header class="grid-x">
+        <h1 class="cell small-8 medium-8 medium-offset-1 large-6 large-offset-2">My Travel Planner</h1>
+        <button class="cell small-4 medium-2 large-2 button hollow small-only-expanded">My Trips</button>
     </header>
     <main class="grid-x">
-        <form class="cell medium-10 medium-offset-1 large-8 large-offset-2">
+        <form class="mainBox cell medium-10 medium-offset-1 large-8 large-offset-2">
             <label>
                 <select type="city" id="currentcity" required>
                     <option value="" disabled selected>Choose a Canada/US airport</option>
@@ -31,25 +35,26 @@
                 </select>
                 <div class="label-text">Travelling To</div>
             </label>
-            <label>
+            <label class="dates">
                 <input type="date" id="startdate" required />
                 <div class="label-text">Start Date</div>
             </label>
-            <label>
+            <label class="dates">
                 <input type="date" id="enddate" required />
                 <div class="label-text">End Date</div>
             </label>
             <hr>
             <button type="submit" class="expanded button" id="submitBtn">Submit</button>
         </form>
-        <div id="weatherSection" class="cell medium-10 medium-offset-1 large-8 large-offset-2" hidden>
+        <div id="weatherSection" class="mainBox cell medium-10 medium-offset-1 large-8 large-offset-2" hidden>
             <h2>Weather</h2>
             <div id="weatherView"></div>
-            <label>
+            <p id="warn">Weather forecast beyond 14 days from today is based on last year's weather</p>
+            <label class="dates">
                 <input type="date" id="startdateUpdate" />
                 <div class="label-text">Start Date</div>
             </label>
-            <label>
+            <label class="dates">
                 <input type="date" id="enddateUpdate" />
                 <div class="label-text">End Date</div>
             </label>
@@ -57,34 +62,41 @@
             <button type="submit" class="expanded button" id="updateBtn">Update Date</button>
             <button type="submit" class="expanded button nextBtn">Next Step</button>
         </div>
-        <div id="flightSection" class="cell medium-10 medium-offset-1 large-8 large-offset-2" hidden>
+        <div id="flightSection" class="mainBox cell medium-10 medium-offset-1 large-8 large-offset-2" hidden>
             <h2>Flight</h2>
             <div id="flightsList"></div>
             <hr>
             <button type="submit" class="expanded button nextBtn">Next Step</button>
         </div>
-        <div id="activitiesSection" class="cell medium-10 medium-offset-1 large-8 large-offset-2" hidden>
+        <div id="activitiesSection" class="mainBox cell medium-10 medium-offset-1 large-8 large-offset-2" hidden>
             <h2>Activities</h2>
             <div id="activitiesList"></div>
             <hr>
             <button type="submit" class="expanded button nextBtn">Next Step</button>
         </div>
-        <div id="summarySection" class="cell medium-10 medium-offset-1 large-8 large-offset-2" hidden>
+        <div id="summarySection" class="mainBox cell medium-10 medium-offset-1 large-8 large-offset-2" hidden>
             <h2>Trip Summary</h2>
-            <div id="costChart">
-                
-            </div>
-            <div id="itinerary">
-                <ul>Your itinerary:
-
-                </ul>
+            <div class="grid-x">
+                <div id="costChart" class= "cell large-6">
+                    <h3>Expenses Summary</h3>
+                </div>
+                <div id="itinerary" class= "cell large-6">
+                    <h3>Your itinerary</h3>
+                    <p id="tr1"></p>
+                    <p id="tr2"></p>
+                    <br />
+                    <ol></ol>
+                    <br/>
+                    <p id="tr3"></p>
+                    <p id="tr4"></p>
+                </div>
             </div>
             <hr>
             <button type="submit" class="expanded button nextBtn">Save</button>
         </div>
     </main>
     <div id="modal">
-        <img src="assets/images/Loading.gif"/>
+        <img src="assets/images/Loading.gif" />
     </div>
     <script src="script.js"></script>
     <script src="cities.js"></script>
