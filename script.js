@@ -1,4 +1,4 @@
-var trip = { 'start': null, 'end': null, 'home': null, 'dest': null, 'flight': null, 'activities': new Array(), 'price': new Number() };
+var trip = { 'start': null, 'end': null, 'home': null, 'dest': null, 'flight': null, 'activities': null, 'price': new Number() };
 var cityID = null;
 var destID = null;
 var startDate = null;
@@ -10,6 +10,7 @@ var chosenFlight = null;
 var chosenActivitiesIndex = new Array();
 var chosenActivities = new Array();
 var savedTrips = new Array();
+var currentStage = 'mainSection';
 
 function modal() {
     $("#modal").toggleClass("flex");
@@ -166,6 +167,7 @@ function loadWeather() {
     $("#weatherSection h2").text(`Weather in ${toCity[destID].name}`)
     $("form").hide();
     modal();
+    currentStage = 'weatherSection';
     $("#weatherSection").show();
 }
 
@@ -197,6 +199,7 @@ $("#weatherSection .nextBtn").click((e) => {
             $("#flightSection h2").text(`Flights from ${fromCity[cityID].city}, ${fromCity[cityID].country} to ${toCity[destID].name}`)
         }
 
+        currentStage = 'flightSection';
         $("#weatherSection").hide();
         $("#flightSection").show();
         modal();
@@ -295,6 +298,7 @@ $("#flightSection .nextBtn").click((e) => {
     if (chosenFlight != null) {
         modal();
         loadAct();
+        currentStage = 'activitiesSection';
         $("#flightSection").hide();
         $("#activitiesSection").show();
         modal();
@@ -355,6 +359,7 @@ $("#activitiesSection .nextBtn").click((e) => {
     })
 
     loadSummary();
+    currentStage = 'summarySection';
     $("#activitiesSection").hide();
     $("#summarySection").show();
     modal();
@@ -367,6 +372,7 @@ $("#activitiesSection .nextBtn").click((e) => {
 //Summary
 
 function loadSummary(viewTrip) {
+
     if (viewTrip == null) {
 
         //Load Trip Info
@@ -375,17 +381,32 @@ function loadSummary(viewTrip) {
         trip.home = cityID;
         trip.dest = destID;
         trip.flight = chosenFlight;
+        trip.activities = new Array();
         chosenActivities.forEach(el => {
             trip.activities.push(el)
         })
         trip.price = Number(trip.flight.price);
         trip.activities.forEach(el => {
-            console.log(el.price);
             trip.price += Number(el.price);
         })
+        $("#summarySection .returnBtn").hide();
 
-    }else{
-        trip = viewTrip;
+    } else {
+        trip.start = viewTrip.start;
+        trip.end = viewTrip.end;
+        trip.home = viewTrip.home;
+        trip.dest = viewTrip.dest;
+        trip.flight = viewTrip.flight;
+        trip.activities = new Array();
+        viewTrip.activities.forEach(el => {
+            trip.activities.push(el)
+        })
+        trip.price = Number(trip.flight.price);
+        trip.activities.forEach(el => {
+            trip.price += Number(el.price);
+        })
+        $("#summarySection .nextBtn").hide()
+        $("#summarySection .returnBtn").show();
     }
 
     //Expenses Chart
@@ -393,11 +414,11 @@ function loadSummary(viewTrip) {
 
 
     //Itinerary List
-
+    $("#actList").empty();
     $("#tr1").text(`Leave from ${fromCity[trip.home].city}, ${fromCity[trip.home].country} on ${trip.flight.departureHomeTime}`);
     $("#tr2").text(`Arrive to ${toCity[trip.dest].name} on ${trip.flight.arrivalDestTime}`);
     trip.activities.forEach((el) => {
-        $("<li>").text(`Visit ${el.activity}`).appendTo("ol");
+        $("<li>").text(`Visit ${el.activity}`).appendTo($("#actList"));
     });
     $("#tr3").text(`Leave from ${toCity[trip.dest].name} on ${trip.flight.departureDestTime}`);
     $("#tr4").text(`Arrive to ${fromCity[trip.home].city}, ${fromCity[trip.home].country} on ${trip.flight.arrivalHomeTime}`);
@@ -417,6 +438,7 @@ function drawChart() {
     google.charts.setOnLoadCallback(loadChart);
     function loadChart() {
         var arrOfArrs = [['Expenses', 'CAD']];
+        console.log(trip.flight.price);
         arrOfArrs.push(['Flight', Number(trip.flight.price)]);
         trip.activities.forEach((el, index) => {
             arrOfArrs.push([index + 1, el.price]);
@@ -456,6 +478,7 @@ function loadSavedTrips() {
 }
 
 $("header button").click(e => {
+    console.log(JSON.stringify(savedTrips));
     $("#modal img").hide()
     var modalContent = $("<div id='savedTrips'>");
     modalContent.append("<h1>My Saved Trips</h1><br/>");
@@ -474,7 +497,8 @@ $("header button").click(e => {
 })
 
 function closeModal() {
-    $("#modal").empty().removeClass("flex");
+    $("#modal").removeClass("flex");
+    $("#savedTrips").remove();
     $("#modal img").show()
 }
 
@@ -489,5 +513,18 @@ $(document).on('click', '.savedTrip', function (e) { //event listener for actiti
     loadSummary(savedTrips[$(this).data("id")]);
 });
 
+$("#summarySection .returnBtn").click(e => {
+    if (currentStage == 'summarySection') {
+        loadSummary();
+    }
+    $("#weatherSection").hide();
+    $("#flightSection").hide();
+    $("#activitiesSection").hide();
+    $("#summarySection").hide();
+    console.log(currentStage);
+    $(`#${currentStage}`).show();
+    $("#summarySection .nextBtn").show()
+    $("#summarySection .returnBtn").hide();
+})
 
 loadSavedTrips();

@@ -22,7 +22,7 @@
         <button class="cell small-4 medium-2 large-2 button hollow small-only-expanded">My Trips</button>
     </header>
     <main class="grid-x">
-        <form class="mainBox cell medium-10 medium-offset-1 large-8 large-offset-2">
+        <form id="mainSection" class="mainBox cell medium-10 medium-offset-1 large-8 large-offset-2">
             <label>
                 <select type="city" id="currentcity" required>
                     <option value="" disabled selected>Choose a Canada/US airport</option>
@@ -77,26 +77,27 @@
         <div id="summarySection" class="mainBox cell medium-10 medium-offset-1 large-8 large-offset-2" hidden>
             <h2>Trip Summary</h2>
             <div class="grid-x">
-                <div id="costChart" class= "cell large-6">
+                <div id="costChart" class="cell large-6">
                     <h3>Expenses Summary</h3>
                 </div>
-                <div id="itinerary" class= "cell large-6">
+                <div id="itinerary" class="cell large-6">
                     <h3>Your itinerary</h3>
                     <p id="tr1"></p>
                     <p id="tr2"></p>
                     <br />
-                    <ol></ol>
-                    <br/>
+                    <ol id="actList"></ol>
+                    <br />
                     <p id="tr3"></p>
                     <p id="tr4"></p>
                 </div>
             </div>
             <hr>
             <button type="submit" class="expanded button nextBtn">Save</button>
+            <button type="submit" class="expanded button returnBtn" hidden>Return</button>
         </div>
     </main>
     <div id="modal">
-        <img src='assets/images/Loading.gif'/>
+        <img src='assets/images/Loading.gif' />
     </div>
     <script src="script.js"></script>
     <script src="cities.js"></script>
