@@ -9,10 +9,9 @@ var activities = new Array();
 var chosenFlight = null;
 var chosenActivitiesIndex = new Array();
 var chosenActivities = new Array();
-
+var savedTrips = new Array();
 
 function modal() {
-
     $("#modal").toggleClass("flex");
 }
 
@@ -367,22 +366,27 @@ $("#activitiesSection .nextBtn").click((e) => {
 
 //Summary
 
-function loadSummary() {
+function loadSummary(viewTrip) {
+    if (viewTrip == null) {
 
-    //Load Trip Info
-    trip.start = startDate;
-    trip.end = endDate;
-    trip.home = cityID;
-    trip.dest = destID;
-    trip.flight = chosenFlight;
-    chosenActivities.forEach(el => {
-        trip.activities.push(el)
-    })
-    trip.price = Number(trip.flight.price);
-    trip.activities.forEach(el => {
-        console.log(el.price);
-        trip.price += Number(el.price);
-    })
+        //Load Trip Info
+        trip.start = startDate;
+        trip.end = endDate;
+        trip.home = cityID;
+        trip.dest = destID;
+        trip.flight = chosenFlight;
+        chosenActivities.forEach(el => {
+            trip.activities.push(el)
+        })
+        trip.price = Number(trip.flight.price);
+        trip.activities.forEach(el => {
+            console.log(el.price);
+            trip.price += Number(el.price);
+        })
+
+    }else{
+        trip = viewTrip;
+    }
 
     //Expenses Chart
     drawChart();
@@ -399,9 +403,13 @@ function loadSummary() {
     $("#tr4").text(`Arrive to ${fromCity[trip.home].city}, ${fromCity[trip.home].country} on ${trip.flight.arrivalHomeTime}`);
 }
 
-$("#summarySection .nextBtn").click(e => {
+$("#summarySection .nextBtn").click(e => {                  //Save Trip
     e.preventDefault;
-    localStorage.setItem(`${fromCity[trip.home].city}, ${fromCity[trip.home].country} - ${toCity[trip.dest].name}`, JSON.stringify(trip));
+    if (!savedTrips.includes(trip)) {
+        savedTrips.push(trip);
+        localStorage.setItem('savedTrips', JSON.stringify(savedTrips));
+        $("#summarySection h2").text("Trip Summary   -   Saved!")
+    }
 })
 
 function drawChart() {
@@ -417,7 +425,7 @@ function drawChart() {
         var chartWidth = document.getElementById('costChart').offsetWidth;
         console.log(chartWidth);
         var options = {
-            width: chartWidth, height: (chartWidth-50),legend: { position: 'bottom', alignment: 'center' }, pieSliceText: 'value', chartArea: { width: "80%" }
+            width: chartWidth, height: (chartWidth - 50), legend: { position: 'bottom', alignment: 'center' }, pieSliceText: 'value', chartArea: { width: "80%" }
         };
         var chart = new google.visualization.PieChart(document.getElementById("costChart"));
         console.log(chart);
@@ -426,7 +434,60 @@ function drawChart() {
     }
 }
 
-$(window).on('resize', function() {
+$(window).on('resize', function () {
     $("#costChart").empty();
     drawChart();
 });
+
+
+
+
+
+
+
+
+
+//Saved Trips
+function loadSavedTrips() {
+    var saved = JSON.parse(localStorage.getItem('savedTrips'));
+    if (saved != null) {
+        savedTrips = saved;
+    }
+}
+
+$("header button").click(e => {
+    $("#modal img").hide()
+    var modalContent = $("<div id='savedTrips'>");
+    modalContent.append("<h1>My Saved Trips</h1><br/>");
+    if (savedTrips != "") {
+        var modalList = $("<div id='listOfTrips'>").appendTo(modalContent);
+        savedTrips.forEach((el, index) => {
+            var newTrip = $(`<p class='savedTrip' data-id=${index}>`);
+            newTrip.text(`${fromCity[el.home].city}, ${fromCity[el.home].country} - ${toCity[el.dest].name} on ${el.start}`);
+            newTrip.appendTo(modalList);
+        });
+    } else {
+        modalContent.append("<p>You have no saved trips.</p>")
+    }
+    modalContent.append("<button class='button hollow' onclick='closeModal()'>Close</button>");
+    $("#modal").append(modalContent).addClass("flex");
+})
+
+function closeModal() {
+    $("#modal").empty().removeClass("flex");
+    $("#modal img").show()
+}
+
+$(document).on('click', '.savedTrip', function (e) { //event listener for actitivies boxes
+    e.preventDefault();
+    closeModal();
+    $("form").hide();
+    $("#weatherSection").hide();
+    $("#flightSection").hide();
+    $("#activitiesSection").hide();
+    $("#summarySection").show();
+    loadSummary(savedTrips[$(this).data("id")]);
+});
+
+
+loadSavedTrips();
