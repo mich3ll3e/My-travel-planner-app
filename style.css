@@ -1,122 +1,145 @@
+/* GENERAL */
 
-/* api containers */
-#containers {
-    width: 90%;
-    margin: auto;
-    border: 2px solid black;
-    text-align: center;
+.button{
+  background-color: rgb(63, 91, 151);
 }
 
-/* headers */
+h3{
+  font-size: 14pt;
+  font-weight: bold;
+}
+
+*:active, *:focus{
+  border: none;
+  outline: none;
+}
+
+/* HEADER */
 header {
-  text-align: center;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+}
+
+h1{
+  font-family: 'Sansita', sans-serif;
+  color: rgb(63, 91, 151);  
+  }
+header button{
+margin-bottom: 0px !important;
 }
 
 
-/* START OF INDEX CSS */
+/* MAIN */
 
-/* container around text box */
-#container {
-    width: 65%;
-    text-align: center;
-    background:rgb(101, 173, 197);
-    margin: auto;
+.mainBox{
+  border: solid 2px rgb(63, 91, 151);
+  padding: 30px;
+  border-radius: 5px;
 }
 
-/* text box css */
+
+.error{
+  color: red;
+}
+
 label {
     display: block;
     letter-spacing: 4px;
     padding-top: 30px;
     text-align: center;
   }
-  label .label-text {
-    color: black;
-    cursor: text;
-    font-size: 15px;
-    line-height: 20px;
-    text-transform: uppercase;
-    
-  }
+
+label .label-text {
+  color: black;
+  cursor: text;
+  font-size: 15px;
+  line-height: 20px;
+  text-transform: uppercase;
+}
+
+.dates{
+  display: inline-block;
+  width: 49.3%;
+}
 
   #weatherView, #flightsList, #activitiesList{
     overflow: auto;
     white-space: nowrap;
     margin: auto;
-    border: solid 1px rgb(128, 129, 131);
+    border-top: solid 1px rgb(128, 129, 131);
+    border-bottom: solid 1px rgb(128, 129, 131);
     padding: 5px;
-    width: 95%;
+    width: 100%;
   }
 
-  .error{
-    color: red;
+  #warn{
+    font-size: 8pt;
   }
 
   .weatherBox{
-    background-color: white;
+    color: white;
     width: 200px;
     height: 150px;
     margin: 5px;
-    padding: 5px;
+    padding: 20px;
     display: inline-block;
-    border: solid 1px rgb(66, 141, 226);
-  }
-
-  *:active, *:focus{
-    border: none;
-    outline: none;
+    text-align: center;
+    background-color: rgb(65, 119, 199);
+    border-radius: 15px;
+    font-size: 12pt;
   }
 
   .flightBox{
-    background-color: white;
+    color: white;
     width: 350px;
-    height: 220px;
+    height: 280px;
     margin: 5px;
+    padding: 20px;
     display: inline-block;
+    text-align: center;
+    background-color: rgb(110, 124, 139);
+    border-radius: 15px;
+    font-size: 12pt;
   }
 
   .activityBox{
     background-color: white;
-    max-width: 600px;
-    height: 220px;
+    width: 600px;
+    height: 320px;
     margin: 5px;
+    padding: 5px;
     display: inline-block;
     white-space: normal;
+    border: solid 2px rgb(110, 124, 139);
+    border-radius: 15px;
+    overflow: hidden;
+    text-align: center;
   }
   
   .activityBox img, .activityBox div{
     float: left;
     width: 50%;
-    height: 100%;
-    border: solid 1px red;
+    height: 220px;
     font-size: 12pt;    
     overflow: scroll;
+    border-bottom: solid 1px gray;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
   }
 
   .activityBox h3{
-    font-size: 12pt;
+    white-space: nowrap;
+    overflow: scroll;
+    border-bottom: solid 1px gray;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
   }
 
-  .chosenActivityFormat{
-    border: solid 3px blue !important;
+  .chosenFlight, .chosenActivityFormat{
+    border: solid 5px rgb(204, 185, 80) !important;
   }
 
-
-/* *:focus{
-    border: none;
-    outline: none;
-  } */
-
-  .chosenFlight{
-    border: solid 3px blue !important;
-  }
-
-
-  #costChart, #itinerary{
-    float: left;
-    width: 50%;
-    border: solid 3px blue;
-  }
 
   #costChart::after, #itineraryChart::after{
     display: block;
@@ -143,4 +166,14 @@ label {
 #modal img{
   width: 10%;
   margin: auto;
+}
+
+
+
+
+@media only screen and (max-width: 424px) {
+  .dates{
+    display: block !important;
+    width: 100%;
+  }
 }
