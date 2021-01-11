@@ -1,35 +1,60 @@
 # My Travel Planner
-Hello, this is my Travel Planner App. The Travel Planner allows you view information & prices about your destination such as, weather, local attractions & flight information. You can plan your budget all at once instead of looking at many sources on the web, in that you will be all prepared ahead of time so all you have to do when you arrive is have fun.
 
-## User Story
-As a tourist, I want to be able to conveniently plan a detailed trip & have a precise estimate of the total cost will be. I need to consider things such as my budget, what to pack for clothing based on the weather, recommended local attractions and my flight information. 
+A trip planning platform.
+
+Link https://mich3ll3e.github.io/My-travel-planner-app/
+
+# High-level description
+
+My Travel Planner allows you to plan the most important aspects of your trips in a centralized location.
+
+- Weather at the destination for the duration of the trip
+- Available flights
+- Activities and attractions to visit at the destination
+- Budgeting and expenses distribution
+- Itinerary
+
+![Screenshot](assets/images/screenshot.png)
+
+## How it works
+As a tourist, I want to be able to conveniently plan the details of my trip. I would like to ensure that the weather at my destination is ideal for the adventures I wish to go on. I also would like to find flights that fit my timeline and budget. Additionally, I would like to have a list of all the activities I can choose to do at my destination, and an idea of how much each costs. With My Travel Planner, I can do all of that!
 
 ## Step 1
-Enter your current location and your destination, as well as the start and end date of your trip.
+Enter current location and destination, as well as the start and end date of the trip.
 
 ## Step 2
-Check out the local weather of your destination during the time period you choose, and change the time period if you would like to.
+Check out the local weather of the destination during the chosen timeline, and change the time period to find the ideal weather.
 
 ## Step 3
-Choose some of the local attractions that you would like to visit.
+Choose from the selection of flights.
 
 ## Step 4
-Choose your plane tickets.
+Brows through the list of activities that can be done at the destination; read the description of each and checkout the prices.
 
 ## Finally
-Check out the budget of your trip based on your selections and get your itinerary.
+Review the budget of the trip based on selected flight and activities, broken down in a pie chart.
+Review detailed Itinerary.
+Save the trip for easy access!
 
 
-## APIs
+# APIs
 
-### Weather
+## Weather
 
-MetaWeather https://www.metaweather.com/api/#locationday
+WorldWeatherOnline http://worldweatheronline.com
 
-### Attractions
+## Flight:
 
-Google places: https://cloud.google.com/maps-platform/places
+Amadeus: https://developers.amadeus.com
 
-### Flight:
+## Attractions
 
-Travelpayouts: https://rapidapi.com/Travelpayouts/api/flight-data/details
+Amadeus: https://developers.amadeus.com
+
+
+# Limitations
+
+## Trip Destinations
+
+Due to limitations in the free API, activities and attractions are available only to a limited number of cities.
+
