@@ -24,6 +24,7 @@ header {
 h1{
   font-family: 'Sansita', sans-serif;
   color: rgb(63, 91, 151);  
+  cursor: pointer;
   }
 header button{
 margin-bottom: 0px !important;
@@ -166,9 +167,15 @@ label .label-text {
   margin: auto;
 }
 
+.modalButton{
+  margin: 5px;
+  width: 100px;
+}
+
 #savedTrips{
   width: 100%;
   text-align: center;
+  height: 80%;
 }
 
 #savedTrips p{

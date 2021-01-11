@@ -430,6 +430,7 @@ $("#summarySection .nextBtn").click(e => {                  //Save Trip
         savedTrips.push(trip);
         localStorage.setItem('savedTrips', JSON.stringify(savedTrips));
         $("#summarySection h2").text("Trip Summary   -   Saved!")
+        currentStage="mainSection";
     }
 })
 
@@ -525,6 +526,22 @@ $("#summarySection .returnBtn").click(e => {
     $(`#${currentStage}`).show();
     $("#summarySection .nextBtn").show()
     $("#summarySection .returnBtn").hide();
+})
+
+$("header h1").click(e=>{
+
+    if(currentStage!="mainSection"){
+
+        $("#modal img").hide()
+        var modalContent = $("<div id='savedTrips'>");
+        modalContent.append("<h1>My Travel Planner</h1><br/>");
+        modalContent.append("<h3>If you continue the trip will be discarded</h3><br/>");
+        modalContent.append("<button class='modalButton button hollow' onclick='location.reload()'>Continue</button>");
+        modalContent.append("<button class='modalButton button hollow' onclick='closeModal()'>Cancel</button>");
+        $("#modal").append(modalContent).addClass("flex");
+    }else{
+        location.reload()
+    }
 })
 
 loadSavedTrips();
