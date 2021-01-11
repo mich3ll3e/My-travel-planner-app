@@ -1,5 +1,5 @@
 # My Travel Planner
-This is my Travel Planner App. In this website, it shows you the information & prices you'll need for your destination such as, weather, price of accommodations, local attractions, filghts, etc... It allows you to plan your budget all at once instead of looking at many sources, in that you will be all prepared ahead of time and all you have to do when you arrive is have fun.
+This is my Travel Planner App. This website allows you view information & prices about your destination such as, weather, local attractions, filghts, etc... You can plan your budget all at once instead of looking at many sources on the web, in that you will be all prepared ahead of time and all you have to do when you arrive is have fun.
 
 ## User Story
 As a tourist, all I want is a convenient way to plan a detailed trip & have a precise estimate of the total cost. I want to consider things such as my budget, what to pack for clothing based on the weather, recommended local attractions and my flight information. 
