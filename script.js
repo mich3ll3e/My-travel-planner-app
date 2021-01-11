@@ -12,13 +12,13 @@ var chosenActivities = new Array();
 var savedTrips = new Array();
 var currentStage = 'mainSection';
 
-function modal() {
+function modal() { 
     $("#modal").toggleClass("flex");
 }
 
 //WEATHER
 
-$("#submitBtn").click((e) => {
+$("#submitBtn").click((e) => { //Assign values to variables from main pane
 
     e.preventDefault();
 
@@ -32,13 +32,13 @@ $("#submitBtn").click((e) => {
     datesCheck("");
 });
 
-$("#updateBtn").click((e) => {
+$("#updateBtn").click((e) => { //Assign date values to variables from weather pane
 
     e.preventDefault();
     startDate = $("#startdateUpdate").val();
     endDate = $("#enddateUpdate").val();
 
-    datesCheck("Update");
+    datesCheck("Update");  //pass value to indicate that check is on weather pane inputs
 });
 
 function datesCheck(type) {
@@ -46,13 +46,13 @@ function datesCheck(type) {
     $(".error").remove();  //remove any displayed errors from previous search
     var error = $("<p>");
     error.addClass("error");
-    if (type == "") {
-        if (!cityID) {
-            error.text("Please choose a valid city")
+    if (type == "") {       //If check is on main pane values then conduct data validation on cities
+        if (!cityID) {          //if from city empty
+            error.text("Please choose a valid city")  //display error
             $("#currentcity").after(error);
             return;
-        } else if (!destID) {
-            error.text("Please choose a valid city")
+        } else if (!destID) { //if to city is empty
+            error.text("Please choose a valid city") //display error
             $("#destination").after(error);
             return;
         }
@@ -63,7 +63,7 @@ function datesCheck(type) {
     } else if (moment(endDate).diff(moment(startDate)) < 0 || !endDate) { //if end date is before start date, display error
         error.text("End date cannot be before the start date")
         $("#enddate" + type).after(error);
-    } else { //else, get the weather
+    } else {                                            //else, assign new values and get weather info
         var stUp = $("#startdateUpdate");
         var enUp = $("#enddateUpdate");
         if (stUp.val() == "" || enUp.val() == "") {
@@ -106,10 +106,10 @@ function lookForWeather() {
 }
 
 async function getForecast(startDate, endDate) {
-    const forecast = new Promise((resolve, reject) => {
+    const forecast = new Promise((resolve, reject) => { //ajax call for forecast
         $.get("http://api.worldweatheronline.com/premium/v1/weather.ashx?q=" + toCity[destID].name + "&tp=12&format=json&key=6dda14a8cc53490d9fd201404210301").then(result => {
             result = result.data.weather;
-            result.forEach(element => {
+            result.forEach(element => {                 //load weather info of required days into weather array
                 let date = moment(element.date);
                 if (date.diff(startDate) >= 0 && date.diff(endDate) <= 0) {
                     var weatherDate = element.hourly[1];
@@ -126,10 +126,10 @@ async function getForecast(startDate, endDate) {
 }
 
 async function getHistorical(startDate, endDate) {
-    const historical = new Promise((resolve, reject) => {
+    const historical = new Promise((resolve, reject) => {  //ajax call for historical data
         $.get("https://api.worldweatheronline.com/premium/v1/past-weather.ashx?q=" + toCity[destID].name + "&date=" + startDate.format('YYYY-MM-DD') + "&enddate=" + endDate.format('YYYY-MM-DD') + "&tp=12&format=json&key=6dda14a8cc53490d9fd201404210301").then(result => {
             result = result.data.weather;
-            result.forEach(element => {
+            result.forEach(element => {                     //load weather info into weather array
                 var weatherDate = element.hourly[1];
                 var newDate = (moment(element.date).add(1, 'years')).format("YYYY-MM-DD")
                 weather.push({ 'date': newDate, 'temperature': weatherDate.tempC, 'humidity': weatherDate.humidity });
@@ -143,8 +143,8 @@ async function getHistorical(startDate, endDate) {
     return historical;
 }
 
-function handleError(e) {
-    $(".error").remove(); //REMOVE THIS WHEN BREAK LOOP IS FIXED
+function handleError(e) { //handle errors from get calls to weather api
+    $(".error").remove();
     var error = $("<p>");
     error.addClass("error");
     if (e instanceof TypeError) {
@@ -157,7 +157,7 @@ function handleError(e) {
     return;
 }
 
-function loadWeather() {
+function loadWeather() { //load weather array into UI elements
     weather.forEach(element => {
         var box = $("<div>").addClass("weatherBox");
         $(box).append("<h3>" + element.date + "</h3>").append("<p>Temperature: " + element.temperature + "°C</p>").append("<p>Humidity: " + element.humidity + "%</p>");
@@ -189,9 +189,7 @@ function loadWeather() {
 
 $("#weatherSection .nextBtn").click((e) => {
     modal();
-    trip.start = startDate;
-    trip.end = endDate;
-    getFlight(startDate, endDate).then((result) => {
+    getFlight(startDate, endDate).then((result) => {        //get flight info and display results
         if (result == "noItems") {
             $("#flightsList").append("<p>No available flights</p>");
         } else {
@@ -206,19 +204,21 @@ $("#weatherSection .nextBtn").click((e) => {
     });
 });
 
-async function getFlight(startDate, endDate) {
+async function getFlight(startDate, endDate) {  //ajax requst of Flights and Activities(same source) and process results
     const flightResults = new Promise((resolve, reject) => {
         $.ajaxSetup({
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             }
         })
+        //get token
         $.post("https://test.api.amadeus.com/v1/security/oauth2/token", { "grant_type": "client_credentials", "client_id": "FGNpTg4n2DkJofCZY7PIpWNtOR5fy9t1", "client_secret": "4kYmZQhOSQ562MJg" }).then((token) => {
             $.ajaxSetup({
                 headers: {
                     'Authorization': "Bearer " + token.access_token
                 }
             });
+            //get activities, process results and load to array
             $.get("https://test.api.amadeus.com/v1/shopping/activities?latitude=" + toCity[destID].latitude + "&longitude=" + toCity[destID].longitude + "&radius=20").then((response) => {
                 if (response.meta.count != 0) {
                     response = response.data;
@@ -234,6 +234,7 @@ async function getFlight(startDate, endDate) {
                     });
                 }
             });
+            //get flights, process results and load to array
             $.get("https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=" + fromCity[cityID].iata + "&destinationLocationCode=" + toCity[destID].iata + "&departureDate=" + startDate + "&returnDate=" + endDate + "&adults=1&travelClass=ECONOMY&nonStop=false&currencyCode=CAD&max=10").then((results) => {
                 if (results.meta.count != 0) {
                     results = results.data;
@@ -274,7 +275,7 @@ async function getFlight(startDate, endDate) {
 }
 
 
-function loadFlight() {
+function loadFlight() { //load flight array info to UI
     flights.forEach((el, index) => {
         var flightBox = $("<div>").addClass("flightBox").attr("data-id", index).attr("tabindex", "1");
         $(flightBox).append(`<p><strong>Leave from:</strong> ${el.home} <strong>on:</strong> ${el.departureHomeTime}</p>`).append(`<p><strong>Arrive to:</strong> ${el.dest} <strong>on:</strong> ${el.arrivalDestTime}</p>`).append(`<hr><p><strong>Leave from: </strong>${el.dest} <strong>on: </strong> ${el.departureDestTime}</p>`).append(`<p><strong>Arrive to: </strong>${el.home} <strong>on: </strong>${el.arrivalHomeTime}</p>`).append(`<hr><p><strong>CAD <strong>${el.price}</p>`);
@@ -282,7 +283,7 @@ function loadFlight() {
     })
 }
 
-$(document).on('click', '.flightBox', function (e) {
+$(document).on('click', '.flightBox', function (e) { //selecting flight
     e.preventDefault();
     var selection = $(this)
     $(".flightBox").removeClass("chosenFlight")  //remove class from previously selected flight
@@ -292,7 +293,7 @@ $(document).on('click', '.flightBox', function (e) {
     chosenFlight = flights[flightID];           //add object to chosenFlight variable
 })
 
-$("#flightSection .nextBtn").click((e) => {
+$("#flightSection .nextBtn").click((e) => { //moving forward to activities
     $(".error").remove();  //remove any displayed errors from previous search
     e.preventDefault();
     if (chosenFlight != null) {
@@ -324,7 +325,7 @@ $("#flightSection .nextBtn").click((e) => {
 
 //ACTIVITIES
 
-function loadAct() {
+function loadAct() { //load activities from array (get request done in flight section)
     console.log(activities)
     activities.forEach((el, index) => {
         var actBox = $("<div>").addClass("activityBox").attr("data-id", index).attr("tabindex", "1");
@@ -335,7 +336,7 @@ function loadAct() {
     });
 };
 
-$(document).on('click', '.activityBox', function (e) { //event listener for actitivies boxes
+$(document).on('click', '.activityBox', function (e) { //event listener for actitivies boxes selection
     e.preventDefault();
     var actID = $(this).data("id")
     var box = $(this);
@@ -350,7 +351,7 @@ $(document).on('click', '.activityBox', function (e) { //event listener for acti
     }
 });
 
-$("#activitiesSection .nextBtn").click((e) => {
+$("#activitiesSection .nextBtn").click((e) => { //move forward to summary
     modal()
     e.preventDefault();
 
@@ -371,9 +372,9 @@ $("#activitiesSection .nextBtn").click((e) => {
 
 //Summary
 
-function loadSummary(viewTrip) {
+function loadSummary(viewTrip) { 
 
-    if (viewTrip == null) {
+    if (viewTrip == null) { //load trip object if no trip passed as argument
 
         //Load Trip Info
         trip.start = startDate;
@@ -391,7 +392,8 @@ function loadSummary(viewTrip) {
         })
         $("#summarySection .returnBtn").hide();
 
-    } else {
+    } else {        //load trip object if trip passed as argument (when loading Saved Trip to summary)
+
         trip.start = viewTrip.start;
         trip.end = viewTrip.end;
         trip.home = viewTrip.home;
@@ -424,17 +426,17 @@ function loadSummary(viewTrip) {
     $("#tr4").text(`Arrive to ${fromCity[trip.home].city}, ${fromCity[trip.home].country} on ${trip.flight.arrivalHomeTime}`);
 }
 
-$("#summarySection .nextBtn").click(e => {                  //Save Trip
+$("#summarySection .nextBtn").click(e => {                  //Save Trip event listener
     e.preventDefault;
-    if (!savedTrips.includes(trip)) {
-        savedTrips.push(trip);
-        localStorage.setItem('savedTrips', JSON.stringify(savedTrips));
+    if (!savedTrips.includes(trip)) {                       //if trip not already saved (included in array)
+        savedTrips.push(trip);                                 //then save
+        localStorage.setItem('savedTrips', JSON.stringify(savedTrips)); //and update local storage
         $("#summarySection h2").text("Trip Summary   -   Saved!")
         currentStage="mainSection";
     }
 })
 
-function drawChart() {
+function drawChart() {                                                  //Google Chart
     google.charts.load('current', { 'packages': ['corechart'] });
     google.charts.setOnLoadCallback(loadChart);
     function loadChart() {
@@ -457,7 +459,7 @@ function drawChart() {
     }
 }
 
-$(window).on('resize', function () {
+$(window).on('resize', function () {        //resize google chart with window
     $("#costChart").empty();
     drawChart();
 });
@@ -470,69 +472,70 @@ $(window).on('resize', function () {
 
 
 
-//Saved Trips
-function loadSavedTrips() {
+//Load saved trips from local storage
+function loadSavedTrips() { 
     var saved = JSON.parse(localStorage.getItem('savedTrips'));
     if (saved != null) {
         savedTrips = saved;
     }
 }
 
+
+//View saved trips
 $("header button").click(e => {
     console.log(JSON.stringify(savedTrips));
-    $("#modal img").hide()
-    var modalContent = $("<div id='savedTrips'>");
+    $("#modal img").hide()                          //remove loading gif from modal
+    var modalContent = $("<div id='savedTrips'>");      
     modalContent.append("<h1>My Saved Trips</h1><br/>");
-    if (savedTrips != "") {
+    if (savedTrips != "") {                         //load saved trips if available
         var modalList = $("<div id='listOfTrips'>").appendTo(modalContent);
         savedTrips.forEach((el, index) => {
             var newTrip = $(`<p class='savedTrip' data-id=${index}>`);
             newTrip.text(`${fromCity[el.home].city}, ${fromCity[el.home].country} - ${toCity[el.dest].name} on ${el.start}`);
             newTrip.appendTo(modalList);
         });
-    } else {
+    } else {                                           //if none, display text
         modalContent.append("<p>You have no saved trips.</p>")
     }
-    modalContent.append("<button class='button hollow' onclick='closeModal()'>Close</button>");
-    $("#modal").append(modalContent).addClass("flex");
+    modalContent.append("<button class='button hollow' onclick='closeModal()'>Close</button>"); //add close button
+    $("#modal").append(modalContent).addClass("flex"); //show modal
 })
 
 function closeModal() {
-    $("#modal").removeClass("flex");
-    $("#savedTrips").remove();
-    $("#modal img").show()
+    $("#modal").removeClass("flex");  //hide modal
+    $("#savedTrips").remove();          //remove saved trips div
+    $("#modal img").show()              //add loading gif back
 }
 
-$(document).on('click', '.savedTrip', function (e) { //event listener for actitivies boxes
+$(document).on('click', '.savedTrip', function (e) { //event listener for saved trips
     e.preventDefault();
-    closeModal();
-    $("form").hide();
+    closeModal();                             
+    $("form").hide();                           //hide all sections
     $("#weatherSection").hide();
     $("#flightSection").hide();
     $("#activitiesSection").hide();
-    $("#summarySection").show();
-    loadSummary(savedTrips[$(this).data("id")]);
+    $("#summarySection").show();                    //show summary section
+    loadSummary(savedTrips[$(this).data("id")]);       //load summary of selected trip
 });
 
-$("#summarySection .returnBtn").click(e => {
-    if (currentStage == 'summarySection') {
-        loadSummary();
-    }
-    $("#weatherSection").hide();
+$("#summarySection .returnBtn").click(e => {           //return button for saved trip summary to return to trip currenltly being created
+    if (currentStage == 'summarySection') {     //If user saved a trip right before viewing another saved one, and wants to go back
+        loadSummary();                          //to the one they just saved, load summary without argument, which loads the properties of the
+    }                                           //trip from variables.
+    $("#weatherSection").hide();                //hide all sections
     $("#flightSection").hide();
     $("#activitiesSection").hide();
     $("#summarySection").hide();
-    console.log(currentStage);
-    $(`#${currentStage}`).show();
-    $("#summarySection .nextBtn").show()
+    $(`#${currentStage}`).show();               //show current section (if current section is summary, the steps above ensure that the
+    $("#summarySection .nextBtn").show()        //correct data was loaded).
     $("#summarySection .returnBtn").hide();
 })
 
-$("header h1").click(e=>{
+$("header h1").click(e=>{                       //home button click
 
-    if(currentStage!="mainSection"){
+    if(currentStage!="mainSection"){            //if unsaved changes, modal with warning, else reload.
 
-        $("#modal img").hide()
+        $("#modal img").hide()          
         var modalContent = $("<div id='savedTrips'>");
         modalContent.append("<h1>My Travel Planner</h1><br/>");
         modalContent.append("<h3>If you continue the trip will be discarded</h3><br/>");
