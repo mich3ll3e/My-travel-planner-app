@@ -16,12 +16,12 @@
 </head>
 
 <body>
-
     <header class="grid-x">
         <h1 class="cell small-8 medium-8 medium-offset-1 large-6 large-offset-2">My Travel Planner</h1>
         <button class="cell small-4 medium-2 large-2 button hollow small-only-expanded">My Trips</button>
     </header>
     <main class="grid-x">
+        <!-- Main pane -->
         <form id="mainSection" class="mainBox cell medium-10 medium-offset-1 large-8 large-offset-2">
             <label>
                 <select type="city" id="currentcity" required>
@@ -46,6 +46,7 @@
             <hr>
             <button type="submit" class="expanded button" id="submitBtn">Submit</button>
         </form>
+        <!-- Weather pane -->
         <div id="weatherSection" class="mainBox cell medium-10 medium-offset-1 large-8 large-offset-2" hidden>
             <h2>Weather</h2>
             <div id="weatherView"></div>
@@ -62,18 +63,21 @@
             <button type="submit" class="expanded button" id="updateBtn">Update Date</button>
             <button type="submit" class="expanded button nextBtn">Next Step</button>
         </div>
+        <!-- Flight pane -->
         <div id="flightSection" class="mainBox cell medium-10 medium-offset-1 large-8 large-offset-2" hidden>
             <h2>Flight</h2>
             <div id="flightsList"></div>
             <hr>
             <button type="submit" class="expanded button nextBtn">Next Step</button>
         </div>
+         <!-- Activities pane -->
         <div id="activitiesSection" class="mainBox cell medium-10 medium-offset-1 large-8 large-offset-2" hidden>
             <h2>Activities</h2>
             <div id="activitiesList"></div>
             <hr>
             <button type="submit" class="expanded button nextBtn">Next Step</button>
         </div>
+        <!-- Summary pane -->
         <div id="summarySection" class="mainBox cell medium-10 medium-offset-1 large-8 large-offset-2" hidden>
             <h2>Trip Summary</h2>
             <div class="grid-x">
@@ -96,6 +100,7 @@
             <button type="submit" class="expanded button returnBtn" hidden>Return</button>
         </div>
     </main>
+    <!-- Modal -->
     <div id="modal">
         <img src='assets/images/Loading.gif' />
     </div>
