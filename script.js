@@ -222,7 +222,6 @@ async function getFlight(startDate, endDate) {  //ajax requst of Flights and Act
             $.get("https://test.api.amadeus.com/v1/shopping/activities?latitude=" + toCity[destID].latitude + "&longitude=" + toCity[destID].longitude + "&radius=20").then((response) => {
                 if (response.meta.count != 0) {
                     response = response.data;
-                    console.log(response)
                     response.forEach(el => {
                         var activity = el.name;
                         var description = el.shortDescription;
@@ -230,7 +229,6 @@ async function getFlight(startDate, endDate) {  //ajax requst of Flights and Act
                         var amount = el.price.amount * 1.55;
                         var activityList = { 'activity': activity, 'description': description, 'picture': imgURL, 'price': amount };
                         activities.push(activityList);
-                        console.log(activityList);
                     });
                 }
             });
@@ -326,7 +324,6 @@ $("#flightSection .nextBtn").click((e) => { //moving forward to activities
 //ACTIVITIES
 
 function loadAct() { //load activities from array (get request done in flight section)
-    console.log(activities)
     activities.forEach((el, index) => {
         var actBox = $("<div>").addClass("activityBox").attr("data-id", index).attr("tabindex", "1");
         $(actBox).append(`<h3>${el.activity}</h3>`).append(`<div><p>Description: ${el.description}</p></div>`).append(`<img src=${el.picture}>`).append(`<p><strong>CAD </strong>${el.price}</p>`);
@@ -340,7 +337,6 @@ $(document).on('click', '.activityBox', function (e) { //event listener for acti
     e.preventDefault();
     var actID = $(this).data("id")
     var box = $(this);
-    console.log(chosenActivitiesIndex.includes(actID));
     if (chosenActivitiesIndex.includes(actID)) {  //if activity already selected
         $(this).removeClass("chosenActivityFormat");    //remove selection class
         chosenActivitiesIndex.splice(actID);            // remove activity index from array
@@ -441,19 +437,16 @@ function drawChart() {                                                  //Google
     google.charts.setOnLoadCallback(loadChart);
     function loadChart() {
         var arrOfArrs = [['Expenses', 'CAD']];
-        console.log(trip.flight.price);
         arrOfArrs.push(['Flight', Number(trip.flight.price)]);
         trip.activities.forEach((el, index) => {
             arrOfArrs.push([index + 1, el.price]);
         })
         var data = google.visualization.arrayToDataTable(arrOfArrs);
         var chartWidth = document.getElementById('costChart').offsetWidth;
-        console.log(chartWidth);
         var options = {
             width: chartWidth, height: (chartWidth - 50), legend: { position: 'bottom', alignment: 'center' }, pieSliceText: 'value', chartArea: { width: "80%" }
         };
         var chart = new google.visualization.PieChart(document.getElementById("costChart"));
-        console.log(chart);
         chart.draw(data, options);
         $("#costChart").prepend(`<h3>Expenses Summary - Total $${trip.price.toFixed(2)}</hr>`);
     }
@@ -483,7 +476,7 @@ function loadSavedTrips() {
 
 //View saved trips
 $("header button").click(e => {
-    console.log(JSON.stringify(savedTrips));
+
     $("#modal img").hide()                          //remove loading gif from modal
     var modalContent = $("<div id='savedTrips'>");      
     modalContent.append("<h1>My Saved Trips</h1><br/>");
