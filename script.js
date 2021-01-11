@@ -107,7 +107,7 @@ function lookForWeather() {
 
 async function getForecast(startDate, endDate) {
     const forecast = new Promise((resolve, reject) => { //ajax call for forecast
-        $.get("http://api.worldweatheronline.com/premium/v1/weather.ashx?q=" + toCity[destID].name + "&tp=12&format=json&key=6dda14a8cc53490d9fd201404210301").then(result => {
+        $.get("https://api.worldweatheronline.com/premium/v1/weather.ashx?q=" + toCity[destID].name + "&tp=12&format=json&key=6dda14a8cc53490d9fd201404210301").then(result => {
             result = result.data.weather;
             result.forEach(element => {                 //load weather info of required days into weather array
                 let date = moment(element.date);
