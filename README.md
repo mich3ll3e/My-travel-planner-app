@@ -26,10 +26,11 @@ Enter current location and destination, as well as the start and end date of the
 Check out the local weather of the destination during the chosen timeline, and change the time period to find the ideal weather.
 
 ## Step 3
-Choose from the selection of flights.
+Select from the variety of flights.
 
 ## Step 4
 Brows through the list of activities that can be done at the destination; read the description of each and checkout the prices.
+Select as many activities as you would like to add to your trip.
 
 ## Finally
 Review the budget of the trip based on selected flight and activities, broken down in a pie chart.
