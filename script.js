@@ -453,8 +453,10 @@ function drawChart() {                                                  //Google
 }
 
 $(window).on('resize', function () {        //resize google chart with window
+    if($("#summarySection").is(':visible')){
     $("#costChart").empty();
     drawChart();
+    }
 });
 
 
